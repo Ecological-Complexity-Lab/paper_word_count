@@ -1,0 +1,748 @@
+\documentclass[oneside, a4paper, onecolumn, 11pt]{article}
+
+% Page layout
+\usepackage{geometry}
+\geometry{a4paper,left=20mm,right=20mm,top=20mm,bottom=20mm}
+\usepackage{lineno}
+
+ % Sections
+\usepackage{sectsty}
+\sectionfont{\fontsize{14}{14}\selectfont}
+\subsectionfont{\fontsize{12}{12}\selectfont}
+
+% Paragraph and spacing
+\usepackage{setspace}
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{4pt}
+    \linespread{1.25}
+\usepackage{titlesec}
+    \titlespacing{\section}{0pt}{\parskip}{2pt}
+    \titlespacing{\subsection}{0pt}{\parskip}{2pt}
+    \titlespacing{\subsubsection}{0pt}{\parskip}{2pt}
+    \titlespacing{\paragraph}{0pt}{\parskip}{6pt}
+
+% Fonts
+\usepackage[utf8]{inputenc}
+\usepackage{nccmath}
+\usepackage{csquotes}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{enumitem}
+\usepackage[normalem]{ulem}
+
+% Colors
+\usepackage[dvipsnames]{xcolor}
+\definecolor{Purple1}{RGB}{102, 102, 255}
+\definecolor{Blue1}{RGB}{4, 4, 204}
+\definecolor{ballblue}{rgb}{0.1, 0.67, 0.7}
+
+\newcommand\bcl[2]{\textcolor{#1}{{\fontseries{b}\selectfont #2}}}
+\usepackage{hyperref} % makes links
+\hypersetup{
+	colorlinks,
+	citecolor=ballblue,
+	filecolor=blue,
+	linkcolor=blue,
+	urlcolor=blue
+}
+
+% Figures and Tables
+\usepackage{placeins}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{booktabs} % For \toprule, \midrule
+\usepackage{graphicx}
+\usepackage[]{caption}
+    \captionsetup{font={sf}, labelfont=bf, labelsep=colon}
+    \renewcommand{\figurename}{Fig.} 
+    \setlength{\textfloatsep}{10pt} % Control space between figure caption and text
+    \captionsetup[table]{singlelinecheck=false}
+\usepackage{wrapfig}
+\usepackage{floatrow}
+    \floatsetup[table]{capposition=top}
+
+% Acronyms
+\usepackage[nohyperlinks,nolist]{acronym}
+
+% \usepackage[acronym]{glossaries}
+% \makeglossaries
+% \newacronym{ilp}{ILP}{inductive link prediction}
+
+% Tracking changes
+\newcommand{\shai}[1]{\textcolor{Blue1}{[Shai: #1]}}
+\newcommand{\rami}[1]{\textcolor{Green}{[Rami: #1]}}
+\newcommand{\barry}[1]{\textcolor{orange}{[Barry: #1]}}
+\newcommand{\assigned}[2]{\textcolor{red}{[@\textbf{#1}: #2]}}
+\newcommand{\addref}[1]{\textcolor{red}{[add ref#1]}}
+
+% Command for GitHub issue reference
+\newcommand{\ghissue}[1]{%
+    \href{https://github.com/Ecological-Complexity-Lab/link-predict/issues/#1}{GitHub Issue #1}%
+}
+
+% Bibliography
+\usepackage[backend=bibtex,style=nature,natbib=true,url=false,date=year,doi=true,isbn=false,eprint=false]{biblatex}
+\AtEveryBibitem{
+    \clearlist{language}
+    \clearfield{issue}
+    \clearfield{note}
+}
+
+\renewcommand*{\multicitedelim}{\addcomma}
+\addbibresource{references.bib}
+
+%%%ORCID
+% Make Orcid icon
+\definecolor{lime}{HTML}{A6CE39}
+\DeclareRobustCommand{\orcidicon}{%
+	\begin{tikzpicture}
+	\draw[lime, fill=lime] (0,0) 
+	circle [radius=0.16] 
+	node[white] {{\fontfamily{qag}\selectfont \tiny ID}};
+	\draw[white, fill=white] (-0.0625,0.095) 
+	circle [radius=0.007];
+	\end{tikzpicture}
+	\hspace{-2mm}
+}
+
+\foreach \x in {A, ..., Z}{%
+	\expandafter\xdef\csname orcid\x\endcsname{\noexpand\href{https://orcid.org/\csname orcidauthor\x\endcsname}{\noexpand\orcidicon}}
+}
+
+% Define the ORCID iD command for each author separately.
+\newcommand{\orcidauthorA}{0000-0003-0430-5568} % Shai
+\newcommand{\orcidauthorB}{0009-0000-3718-8172} % Barry
+\newcommand{\orcidauthorC}{0000-0002-7229-3899} % Rami
+
+\usepackage[affil-it]{authblk}
+
+% \title{Prominent signatures of global processes shaping the structure of microbial co-occurrence networks}
+
+\title{Inductive link prediction boosts data availability and enables cross-community link prediction in ecological networks}
+
+\author[1]{Barry Biton\orcidB{}}
+\author[2]{Rami Puzis\orcidC{}}
+\author[1,3,*]{Shai Pilosof\orcidA{}}
+
+\affil[1]{Department of Life Sciences, Ben-Gurion University of the Negev, Beer-Sheva, Israel}
+\affil[2]{Department of Systems Information and Software Engineering, Ben-Gurion University of the Negev, Beer-Sheva, Israel}
+\affil[3]{The Goldman Sonnenfeldt School  of Sustainability and Climate Change, Ben-Gurion University of the Negev, Be'er Sheva, Israel}
+\affil[*]{Corresponding author: pilos@bgu.ac.il}
+
+\begin{document}
+
+\begin{acronym}
+    \acro{ilp}[ILP]{inductive link prediction}
+    \acro{tlp}[TLP]{transductive link prediction}
+    \acro{sbm}[SBM]{stochastic block model}
+    \acro{pr}[PR]{precision-recall}
+\end{acronym}
+
+\maketitle
+
+\linenumbers
+
+\section*{Abstract}
+Predicting species interactions within ecological networks is vital for understanding ecosystem functioning and the response of communities to changing environments. Traditional link prediction models often fall short due to sparse and incomplete data and are limited to single networks. Here, we present a novel approach using inductive link prediction (ILP), which leverages structural similarities across diverse ecological networks. Our model pools data across communities, and uses transfer learning to enable prediction within and between different ecological communities. We applied our model to 538 networks across four community types: plant-seed disperser, plant-pollinator, host-parasite, and plant-herbivore. ILP outperforms non-ILP models, particularly in host-parasite and plant-seed disperser networks. However, the efficacy of cross-community predictions varies, with plant-pollinator networks consistently under-performing as train and test sets. Moreover, we developed the first method to computationally estimate the limits of link prediction given a certain proportion of missing links, in which ILP performs better than a non-ILP model. This study underscores the potential of ILP to generalize link prediction across different ecological contexts.
+
+\begin{refsection}
+
+\clearpage
+
+\section*{Introduction}
+
+Ecosystem services, such as pollination, are fundamental for human societies and result from interactions between many organisms in ecological communities~\autocite{Windsor2022-ch}. For example, crop pollination highly depends on the interactions between wild bees and non-crop flowers~\autocite{Magrach2018-me}. These dependencies can be described mathematically using networks in which nodes represent species and links represent their interactions. 
+Complete sampling and representation of species interaction networks would enhance our understanding of the complex indirect dependencies between species. However, given the immense resources required to attain and validate each interaction~\autocite{Falcao2016-vq,Jordano2016-jy,Dallas2017-lu}, it is clear that ecological networks are consistently under-sampled, hampering our ability to analyze their true structure. One way to address the under-sampling problem is to predict the most probable, yet unconfirmed links~\autocite{Rohr2016-kv,Desjardins-Proulx2017-ba,Terry2020-wv,Pichler2020-bg,Stock2021-mf,Strydom2021-aq,Benadi2022-yv}. Moreover, predicting interactions helps us understand how ecological networks will respond to anthropogenic changes and environmental shifts. For example, predicting disease hosts and interactions between local and invasive species~\autocite{Strydom2021-aq}. However, link prediction in ecological networks is highly challenging because these networks are small (insufficient data) and sparse (many unobserved links and very few observed ones). 
+
+Ecological link prediction models can use information on species traits~\autocite{Pichler2020-bg,Caron2024-jf} and phylogeny~\autocite{Benadi2022-yv}, but these are often difficult to obtain or biased because some taxonomic groups are far more studied than others. Instead, it is possible to rely on the topology of the known part of the network to predict the unknown~\autocite{Desjardins-Proulx2017-ba,Terry2020-wv}. For instance, a well-connected species will likely have another link. Such approaches that predict missing links based on known properties within the same network are called \textit{transductive} link prediction~\autocite{Ahmadi2023-gn}. While this is the primary approach used in ecology so far~\autocite{Desjardins-Proulx2017-ba,Terry2020-wv}, its performance is hindered in networks where only few links are known or where some parts are known much better than the others~\autocite{Fire2013-aa,Galkin2022-il}, two issues prevalent in ecological networks. 
+
+To overcome these issues, we take an approach called \ac{ilp}, in which links in one network are predicted by learning the structure of others~\autocite{Galkin2022-il}. \ac{ilp} harnesses the principle of universality~\autocite{Watts1998-kd,Barabasi2021-fs,Barabasi1999-eg,Milo2002-nf}, reflected in ecological networks by cross-system topological similarities~\autocite{Fortuna2010-wb,Michalska-Smith2019-ap}. The structure of ecological networks is shaped by multiple ecological and evolutionary processes, including spatiotemporal distributions, evolutionary history, and neutral processes~\autocite{Vazquez2009-tr,Bascompte2014-nm,Segar2020-tq}. Despite the very different nature and idiosyncrasy of ecological systems (e.g., mutualistic vs antagonistic networks), these processes generate non-random recurring patterns commonly observed in different types of networks~\autocite{Bascompte2009-tx,Delmas2019-gk,Guimaraes2020-kh}. For example, both antagonistic and mutualistic ecological networks typically exhibit a heavy-tail degree distribution whereby most nodes have few links (low degree), and a few nodes have many links (high degree)~\autocite{Jordano2003-pa,Vazquez2005-np,Williams2011-yv}. At the mesoscale level, structures such as nestedness and modularity have been detected in host-parasite, plant-pollinator, and plant-seed disperser networks~\autocite{Bascompte2003-ad, Olesen2007-rl, Fortuna2010-wb, Krasnov2012-ss,Dallas2015-sd}. 
+
+Cross-system similarities in macroscopic patterns provide an opportunity to increase training data by using multiple networks within an \ac{ilp} framework~\autocite{Gao2022-jd,Hao2020-le}. In addition, it enables transfer learning, where a model trained on data from one domain is applied to predict outcomes in another. The idea of using transfer learning in ecology has been recently proposed~\autocite{Strydom2023-nb}, but to the best of our knowledge, in ecology, only Caron et al.~\autocite{Caron2024-jf} used transfer learning to predict links in food webs in one area (e.g., Europe) based on knowledge in another (e.g., Serengetti). Using trait-based predictions, they found that pairwise interactions are better predicted using a model trained on the same food web than with models trained on other food webs. However, they did not pool data from different food webs for training. 
+
+Given the structural similarities between networks from different ecological communities, we hypothesize that \ac{ilp} is more effective than transductive link prediction for predicting links in ecological networks. Further evidence for the plausibility of this hypothesis comes from two recent studies that showed that it is challenging to identify the type of network (e.g., plant-pollinator, host-parasite) based solely on its structure~\autocite{Michalska-Smith2019-ap,Brimacombe2023-fk}. This is because variation in network structure is similar within and between different types of ecological networks. On the one hand, this observation means that it would be challenging to predict the ecological community of a network based on its structure~\autocite{Michalska-Smith2019-ap}. On the other hand, the structural similarity of different community types can be utilized for link prediction by enlarging the training dataset. We tested this hypothesis using an \ac{ilp} model we developed, which further enables cross-community prediction. We find that our model outperforms transductive link prediction models in predicting links, but that prediction accuracy varies by community type. Specifically, plant-pollinator networks weaken cross-community predictions while host-parasite networks enhance them.
+
+\section*{Results}
+
+\subsection*{Data}\label{sec:Methods}
+
+We used the data set compiled by~\autocite{Michalska-Smith2019-ap} (also later used by~\autocite{Brimacombe2023-fk}). We used networks with $\geq25$ species and with connectance $\geq0.1$ (Table \ref{tab:SI_networks_summary_properties}). This data set includes 205 plant-seed disperser networks (PSD), 217 plant-pollinator networks (PP), 84 host-parasite networks (HP), and 32 plant-herbivore networks (PH) (538 networks in total). A potential limitation of the data set could be the non-equal number of networks per community. To test for this, we included the type of community as a feature in the model, and it was not an important feature in the prediction. In addition, communities represented by more networks were not necessarily better train or test sets (see results below), indicating that the number of networks is not a limitation. As previously shown for this data set~\autocite{Michalska-Smith2019-ap,Brimacombe2023-fk}, variation in network structure was not higher between than within networks (Fig. \ref{fig:SI_networks_PCA}). 
+
+\subsection*{Overview of the link prediction pipeline} \label{sec:MLpipleline}
+We developed a pipeline to evaluate the performance of \ac{ilp} models on multi-network data sets using nested cross-validation (Fig. \ref{fig:pipeline}). We split the data into training, validation and test sets, ensuring that instances (links) from the same network are always together in the set. We predicted links based on network properties, which we used as features in the model (feature extraction). In the inner loop, we used the training and validation sets to tune hyperparameters and select the best model to perform link prediction on the test set. We performed 5-fold cross-validation in the outer loop. We used popular machine learning models: logistic regression, random forest, and XGboost. The results did not qualitatively change between models (Supplementary note \ref{sec:SI_models}), and we present results for Random Forest. We considered the significant imbalance between the number of observed and unobserved interactions~\autocite{Poisot2023-di}.
+
+\begin{figure}[ht]
+\centering
+    \includegraphics[width=\textwidth]{images/pipeline.pdf}
+    \caption{\textbf{Pipeline overview.} (A) We used nested cross-validation, with 3 and 5 folds in the inner and outer loops, respectively. We split the data into train, validation, and test sets and calculated network properties (feature extraction). The validation and test sets contained subsampled links (red x's). We used the inner loop to tune the hyperparameters (using random search) and selected the best model to predict links in the test set in the outer loop. Model evaluation was based on a confusion matrix with TP, TN, FP, and FN values gathered from the outer loop's five folds. When splitting the data, we ensured that each network was included entirely in the set (i.e., we split the data by networks, not by links) and that each network appeared at least once in the test set. See details in Methods.}
+    \label{fig:pipeline}
+\end{figure}
+
+
+\subsection*{Inductive link prediction outperforms prediction with a single network}
+
+To test the hypothesis that collating data across communities would improve link prediction, we compared our model performance to three models that train and test on a single network at a time (transductive models). The first two were \ac{sbm} and connectance, which were previously published and are not based on machine learning~\autocite{Terry2020-wv}). The third was a transductive machine learning model we developed \ac{tlp}. Overall, the machine learning \ac{ilp} and \ac{tlp} models outperformed \ac{sbm} and connectance (Fig. \ref{fig:ILP_vs_TLP}). \ac{ilp} predicts 1's better than \ac{tlp} as it has a higher recall but similar precision. However, this comes at the expense of its ability to recover 0's (lower specificity). Nevertheless, in the overall balance, the \ac{ilp} model outperforms \ac{tlp} (higher BA). 
+
+We further evaluated the \ac{ilp} model using the ROC curve across thresholds. The prediction was highly accurate when using the full data set or per community (Fig. \ref{fig:roc_pr_curves}A). Because imbalance restricts the interpretation of ROC curves, we also used the \ac{pr} curve. The \ac{pr} tradeoff indicates the ability of the model to retrieve links (recall) while minimizing false positives (precision). The \ac{pr} AUC was higher than the random expectation for all communities (Fig. \ref{fig:roc_pr_curves}B). The AUC of both curves was similar to that of the \ac{tlp} model. (Fig. \ref{fig:ILP_vs_TLP}). These results did not vary quantitatively when prediction was performed within each community type (Fig. \ref{fig:ILP_vs_TLP_community}).
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/ILP_vs_TLP.pdf}
+    \caption{\textbf{Comparison of model performance}. The \acl{ilp} model was trained and tested on networks from all communities. We compared \ac{ilp} to two transductive previously published models (\acl{sbm} and connectance;~\autocite{Terry2020-wv}) and one transductive machine learning model that we developed (\ac{tlp}). Each boxplot is a distribution of an evaluation metric using a 0.5 classification threshold, bedsides the ROC AUC and \ac{pr} AUC. The boxplots show the interquartile range (box), median (central line), data within 1.5 times the interquartile range (whiskers), and potential outliers (individual points beyond whiskers). Each data point is a network and boxplots contain networks from all the five outer folds. BA is balanced accuracy.  See definitions of evaluation metrics in the Methods.}
+    \label{fig:ILP_vs_TLP}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/roc_pr_curves.pdf}
+    \caption{\textbf{Model evaluation across decision thresholds.} The curves represent the performance across the 5 folds, either on all communities or on each community type separately using decision threshold levels ranging from 0 to 1. (A) The receiver operating characteristic (ROC) curve. The model outperforms random guessing as all the curves are above the diagonal dashed line, which depicts random guessing. (B) Model evaluation with the \acl{pr} tradeoff curve.}
+    \label{fig:roc_pr_curves}
+\end{figure}
+
+The most influential network features were at the node level, including node degree, the PDI index of specificity~\autocite{Poisot2012-sy}, and two centrality indices. The only link-level feature was preferential attachment (the multiplication of the two interacting species' degrees) (Fig.~\ref{fig:SI_feature_importance}).
+
+\subsection*{Links are predicted better in particular community types}
+
+The ROC and \ac{pr} curves show that predictive ability varies by community type, with the best predictions performed in host-parasite networks, followed by plant-seed dispersers (Fig. \ref{fig:roc_pr_curves}). Further analyzing the evaluation metrics separately for each ecological community reveals more nuanced differences (Fig. \ref{fig:communities}), whereby there are significant differences in prediction metrics between communities (Kruskal-Wallis test, Table \ref{tab:SI_KW_communities}, Fig. \ref{fig:communities}). The ability of our model to retrieve TP links (recall) was higher in host-parasite and plant-seed disperser communities compared to plant-pollinator and plant-herbivore communities. However, correctly predicting negative links (specificity) is lower in these two communities (Dunn post-hoc tests; Table  \ref{tab:SI_KW_communities_Dunn}).
+
+
+\begin{figure}[ht]
+\centering
+    \includegraphics[width=\textwidth]{images/communities.pdf}
+   \caption{\textbf{Distributions of evaluation metrics per test community type}. The model was trained on networks from all communities, and tested separately on each community type. Each data point is a network and box plots contain networks from all the five outer folds. Evaluation metrics whose labels are green showed a statistically significant difference between communities (Tables \ref{tab:SI_KW_communities}, \ref{tab:SI_KW_communities_Dunn}). MCC is the only metric that can be negative (ranges -1 to 1). The boxplots show the interquartile range (box), median (central line), data within 1.5 times the interquartile range (whiskers), and potential outliers (individual points beyond whiskers)}
+   \label{fig:communities}
+\end{figure}
+\FloatBarrier
+
+\subsection*{Communities vary in their quality as train and test sets}
+
+\ac{ilp} further allows us to perform cross-community link prediction via transfer learning. We trained the model using networks from a given community type and used them to predict links in the same community or in any other. To create unbiased comparisons, we ensured that the number and identity of the networks in the training set were the same across experiments. For instance, we used the same host-parasite networks for training when training on all networks or host-parasite networks alone. Because we are primarily interested in predicting missing links accurately, we focus on the F1 metric. We expected prediction to be more robust within community types (the diagonal in Fig. \ref{fig:cross_community_prediction}). This prediction was confirmed for host-parasite and plant-herbivore networks. In contrast, plant-seed disperser interactions are predicted similarly well when trained on host-parasite or plant-herbivore networks, and plant-pollinator interactions are better predicted when the model was trained on plant-seed disperser networks. 
+
+We further hypothesized that pooling data across all networks (All) for training will improve predictions (i.e., that the ``All'' column will have higher values than within-community predictions). 
+In contrast to our hypothesis, pooling data worsened the predictions. 
+This result can stem from the fact that plant-pollinator networks are highly sparse, and consistently under-perform (Fig. \ref{fig:roc_pr_curves}B), affecting overall predictions. Removing plant-pollinator networks from the training set (No PP) improved predictions. 
+Yet, training with the No PP pool performs only as well as training with the worst single community.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/cross_community_prediction.pdf}
+    \caption{\textbf{Link prediction within and between community types.} Each cell in the heatmap is the median of F1, calculated across all networks for a model that was trained on data from a certain community (columns) and tested on another (rows). The diagonal depicts model results for models trained and tested on the same community type(s). The red dashed border encloses models trained and tested using single community types. ``All'' is a model trained or tested using pooled data from all communities. ``No PP'' is the same as ``All'' but without plant-pollinator networks.}
+    \label{fig:cross_community_prediction}
+\end{figure}
+\FloatBarrier
+
+\subsection*{Estimating the bounds of link prediction performance}
+One issue common to all link prediction studies is the lack of knowledge of the ground truth. That is, which of the non-existing links are truly missing (if we had this knowledge, we would not need link prediction). Ideally, link prediction models would guide the field sampling efforts of ecologists who want to complete their networks. In turn, field data can evaluate model predictions. To date, no empirical study estimated model performance in light of ground truth. Undertaking such effort is necessary but may be extremely time consuming because if links were missing in the first place, an intensive amount of sampling would likely be needed to sample even a few of them. As a starting point, we take here an alternative computational approach. We calculate the bounds of the \ac{ilp} and \ac{tlp} model predictions across a theoretical range of proportion of missing links. We devised two scenarios. In the best-case scenario, the false positive links of the models were indeed missing links. In the worst-case scenario, the predicted negative links are actually positive in nature (see Methods).
+
+We compared the models of the \ac{ilp} and \ac{tlp}. Generally speaking, the goal is to accurately predict missing links, evaluated with recall and F1. Recall is a good measure of our model's predictive ability because it is based solely on instances we manipulated (subsampled), which are observed links. The \ac{ilp} model outperforms \ac{tlp} in recovering missing links overall, as indicated by the consistently higher recall and F1 (which also considers precision) in the best-case and worst-case scenarios. Beyond a certain threshold of missing links, the models' recall will decline below the recall we observe in the data we use (horizontal line). This is because there are more missing links than the FPs predicted by the models. This threshold is higher in \ac{ilp} than in \ac{tlp} (0.33 vs. 0.27), providing further evidence that \ac{ilp} is better suited for predicting missing links. In contrast to \ac{ilp}, the \ac{tlp} model will better predict zeros across the range of missing link proportions, as indicated by higher specificity.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/model_bounds_ILP_TLP.pdf}
+    \caption{\textbf{Bounds of model predictions across proportions of ground-truth missing links.} The horizontal dashed lines depict the current models' performance. The upper and lower curves (solid lines) represent the best and worst-case scenarios, respectively. An example for figure interpretation for the red arrows: If the true proportion of missing links in nature is 0.15, the \ac{ilp} and \ac{tlp} models best-scenario recall values would be $\approx0.8$ and $\approx0.62$, respectively. Bounds were calculated as means, and their confidence intervals (light-colored ribbons) were calculated across all networks. The \ac{ilp} model was one in which the train and test contained networks from all communities.}
+    \label{fig:model_bounds}
+\end{figure}
+\FloatBarrier
+
+
+\section*{Discussion}
+
+% Opening
+Species interactions are the backbone of ecosystem functioning. Link prediction helps us improve our knowledge of species interaction structure and gain insights into how interactions would change in response to perturbations. However, training data are often incomplete and biased. In this paper, we take a step forward using \ac{ilp}, leveraging the structural similarities across different ecological communities~\autocite{Michalska-Smith2019-ap}. The \ac{ilp} approach also allowed us to address data sparsity and incompleteness in ecological networks by pooling information across multiple ecosystems. It also introduces a method to predict interactions in entirely new networks via transfer learning, which is particularly valuable for managing invasive species and predicting disease-host interactions in network contexts. 
+
+% ILP vs TLP
+\ac{ilp} offers three conceptual advantages over \ac{tlp}. First, \ac{tlp} is often limited by the sparse and incomplete nature of ecological network data. \ac{ilp} models overcome these limitations by pooling information across different systems. Indeed, the model we developed generally outperformed transductive models per network in predicting 1's. However, \ac{tlp} models better predicted 0's, pointing to a trade-off between predicting these two classes. Considering that ecologists are most interested in predicting 1's, \ac{ilp} offers a better solution.
+
+While increasing the data set size should theoretically improve predictions, we found that a model trained on all networks did not perform better than models trained on specific community types. Specifically, plant-pollinator networks weaken the prediction. This may happen because while numerous instances existed in the data set, plant-pollinator networks had the lowest connectance.~\autocite{Galkin2022-il}. Low connectance leads to a significant imbalance between existing and non-existing links, which can decrease the precision and recall scores.  
+
+Second, \ac{tlp} models rely on the properties of a single network to predict missing links within that same network and are not generalized in their ability to predict interactions across various ecological contexts. In contrast, in \ac{ilp}, the train and test sets do not need to have the same species. Therefore, it is possible to train a general model that can later be used to predict links in any new network. Such a general model can be applied to predict links of invasive species or new disease hosts in a network context. We trained such a model and predicted links in specific community types. While transfer learning is a promising approach~\autocite{Strydom2023-nb,Caron2024-jf}, our results indicate that variation between communities in their quality as training data underscores the need to also consider the unique characteristics of each community type. Future studies can improve our model by incorporating features specific to community types, such as traits~\autocite{Pichler2020-bg,Benadi2022-yv,Caron2024-jf} or environmental features~\autocite{Song2020-wn}, increasing the train set performance. Nevertheless, adding traits to a model that trains on different kinds of networks is challenging due to substantial biases in data availability between species groups (e.g., parasites vs. birds). 
+
+Third, biases in sampling methods and efforts inevitably lead to biases in network data quality and completeness. Moreover, there is no ground truth to tell us what the actual missing and forbidden links are. This flaw permeates both the learning process and the evaluative framework. In \ac{ilp}, missing links and subsampled links of the tested networks are not used in the learning phase. Therefore, despite the inherent biases, the evaluation of missing links is better in \ac{ilp} models. We performed the first theoretical evaluation of model performance compared to true proportions of missing links and showed that \ac{ilp} would retrieve missing links better than \ac{tlp}. While \ac{ilp} models provide a better guide to detecting missing links, validating their outcomes should be done via field sampling of well-known systems in which missing and forbidden links can be evaluated with high credibility or via literature reviews~\autocite{Farrell2022-nn}. 
+
+% Variability between communities in prediction
+Prediction accuracy varied across different types of ecological networks. Host-parasite and plant-seed disperser networks exhibited higher recall and F1 rates than plant-pollinator and plant-herbivore, indicating better predictive performance for positive links. This may be because host-parasite and seed-disperser networks involve more specialized animal groups, making their topology more predictive. In contrast, plant-pollinator networks contain diverse, heterogeneous animal species with distinct behaviors and roles. Furthermore, host-parasite and plant-seed disperser networks have higher connectance (Table \ref{tab:SI_networks_summary_properties}). 
+
+% Cross-community predictions
+Using networks from multiple communities also allowed us to perform cross-community prediction---an idea that, to our knowledge, was tested once on only four food webs using trait data~\autocite{Caron2024-jf}. In contrast to that study, we found that predictions were not necessarily better within each community. Specifically, plant-pollinator interactions are predicted better when trained on plant-seed disperser networks. Apart from plant-pollinator networks, the overall between-community prediction was similar to within-community predictions. This finding is in line with the notion that different kinds of ecological networks can be subjected to similar assembly patterns or co-evolutionary dynamics~\autocite{Ponisio2017-ii}, resulting in similar structures and constraints on interactions~\autocite{Michalska-Smith2019-ap}. The ability to predict between communities using topological features reinforces that they share a non-random structure despite taxonomic differences in their species composition. 
+
+% Conclusions
+In conclusion, our study highlights the potential of \ac{ilp} models to enhance our understanding of ecological networks by leveraging structural similarities across diverse communities. The \ac{ilp} model we developed outperformed transductive models in retrieving links by pooling information from multiple networks, thus overcoming the limitations of data sparsity and incompleteness. However, our findings also reveal significant variability in prediction accuracy and the quality of train sets across different ecological communities, emphasizing the need for tailored approaches that consider the unique characteristics of each community. Future work should focus on integrating additional ecological and environmental variables such as phylogeny and species traits to improve model performance and on empirically validating predictions to refine further and enhance the applicability of \ac{ilp} in ecological research. Developing a unified \ac{ilp} model that considers the multifaceted nature of ecological networks could offer a practical solution to predicting links in our rapidly changing ecosystems.
+
+
+\section*{Methods}
+
+\subsection*{Nested cross validation and hyperparameters} \label{sec:cv}
+Nested cross-validation allows optimization of hyperparameters along with an unbiased estimation of the model's performance. This reduces the risk of over-fitting by ensuring that the model evaluation is conducted on data not seen during the hyperparameter tuning phase~\autocite{Yates2023-xv}. Hyperparameters control the learning process rather than being learned from the data, and are set before the training process begins~\autocite{Bergstra2012-nt}. The optimal values for the hyperparameters that maximize the machine learning model's performance are selected through hyperparameter tuning during that inner loop of the nested cross-validation (Table \ref{tab:SI_hyperparams}). We optimized hyperparameters using a random search, which is a computationally efficient tuning technique. The process involved randomly sampling values from a predefined search space, followed by training and evaluating model performance on those values using the training and validation sets. We used the F1-score as the performance metric to evaluate the hyperparameter combinations. The average F1-score across all folds was calculated for each random set of hyperparameters. We repeated this procedure for multiple random sets of hyperparameters, and the set that yields the highest F1 score was chosen as the optimal solution for the current iteration of the outer loop. 
+
+Because the data includes multiple networks, we used grouped cross-validation to prevent information leakage between training, validation, and test sets~\autocite{Roberts2017-br}. This method ensures each fold contains entire networks, increasing model robustness by preventing instances from the same network from appearing in the training, validation and test sets simultaneously.
+
+We built and evaluated the machine learning models using the \verb|Scikit-learn| package~\autocite{Pedregosa2011-bw}, with the addition of the \verb|xgboost| package~\autocite{Chen2016-oy}. We executed hyperparameter optimization through randomized search using the scikit-learn's RandomizedSearchCV~\autocite{Pedregosa2011-bw} and the \verb|kerastuner| package~\autocite{OMalley2019-mc}. We used randomized optimization due to its efficiency in exploring the hyperparameter space with fewer iterations compared to traditional grid search method. We optimized the model's hyperparameters using the F1-score. 
+
+\subsection*{Link subsampling and feature extraction} \label{sec:features}
+Because the goal is to predict missing links (possible yet unobserved interactions~\autocite{Olesen2011-rx}), link prediction requires generating a ground truth. That is, a lack of link (0 in the matrix), of which we are certain the link actually exists. A common way to do so is by removing some existing links randomly (sub-sampling)~\autocite{Lu2011-oz,Terry2020-wv}. Hence, to emulate real-world under-sampled networks, each network in the validation and test sets was sub-sampled by randomly removing 20\% of the existing links (20\% is the standard). Sub-sampling creates three types of links:
+\begin{itemize}
+    \item \textit{Existing links}: links that exist in the network and were not sub-sampled.
+    \item \textit{Non-existing links}: links that did not exist in the network. These may be missing or forbidden (interactions not possible due to some ecological, morphological or other constraints~\autocite{Olesen2011-rx}).
+    \item \textit{Subsampled links}: links that existed in the network and are now missing because they were subsampled. Because we want to predict instances in which non-existing links should have existed, sub-sampled links were relabeled as existing after feature extraction.
+\end{itemize}
+
+Each instance in the data set, representing an interaction (or lack of an interaction), between each two species, constitutes a vector of topological features. Our features encompassed four levels as follows:
+\begin{itemize}
+    \item Network-level features: Defined for a whole network (e.g., nestedness). Hence, all the instances that are related to a network will get the same values for those features. We also included the type of network (e.g., plant-pollinator).
+    \item Meso-scale level features: defined for groups of nodes (e.g., motifs).
+    \item Link-level features: Defined for a pair of nodes (e.g., preferential attachment: the multiplication of both node degrees).
+    \item Node-level features: Defined for to each node (e.g., centrality, degree). Each instance will have two different versions of the feature, one for each node in the pair.
+\end{itemize}
+
+Feature extraction is done once on all the data, and is not related to the fold. We rescaled numerical features to a range of [0, 1] to ensure that no particular feature dominates others during the learning process. We calculated feature importance based on the average decrease in Gini impurity across all trees. Features that are more important are used more frequently and result in significant improvements in node purity.
+
+For the analysis of ecological networks and extraction of topological features (network properties), we used the \verb|networkx| package~\autocite{Hagberg2008-wn} in Python and the \verb|igraph|~\autocite{Csardi2006-kz} and \verb|bipartite|~\autocite{Dormann2009-qq} R packages. We handled data manipulation through \verb|numpy|~\autocite{Harris2020-fd} and \verb|Pandas|~\autocite{Team2020-ww, McKinney2010-ps} in Python. A complete list of the features we used and their descriptions are provided on the GitHub repository accompanying this article (\url{https://github.com/Ecological-Complexity-Lab/eco_ILP/blob/main/results/final/features.csv}).
+
+\subsection*{Dealing with class imbalance} \label{sec:imbalance}
+
+In machine learning, class imbalance is a situation in which the distribution of classes in the training data is highly skewed, where one or more classes have considerably fewer samples compared to others. This imbalance can significantly impact the training and evaluation of prediction models~\autocite{Poisot2023-di}. Classifiers developed with such skewed data tend to favor the majority class, which can lead to subpar performance when identifying instances of the minority class. This issue is particularly prevalent in ecological networks, characterized by their sparsity (i.e., low connectance). In binary classification tasks, this sparsity creates a disparity between the small number of existing links (positive class) and the much larger set of non-existing links (negative class)~\autocite{Strydom2021-aq,Poisot2023-di}. To overcome this problem we incorporated cost-sensitive learning (Supplementary note \ref{sec:SI_cost_sensitive})~\autocite{Pedregosa2011-bw}. Specifically, to make the importance of both classes equal, we computed their weights inversely proportionally to the frequency of the respective classes~\autocite{Thai-Nghe2010-xl,Yang2015-ox}.
+
+\subsection*{Evaluation metrics} \label{sec:evaluation}
+
+Performance of LP models can be evaluated using multiple indices, each providing a different perspective on the model's strengths and weaknesses~\autocite{Strydom2021-aq,Poisot2023-di}. The evaluation is based on a confusion matrix that contains the number of true positives, true negatives, false positives and false negatives (Supplementary Note \ref{sec:SI_evaluation}). We used common evaluators adequate for imbalanced data: recall (${TP}/{(TP+FN)}$), precision (${TP}/{(TP+FP)}$), F1 (harmonic mean of precision and recall), specificity (${TN}/{(TN+FP)}$), balanced accuracy (the arithmetic mean of recall and specificity), the area under the receiver operating characteristic curve (ROC AUC), and the area under the precision-recall curve (\ac{pr} AUC). In addition, as recently recommended for ecological networks, we also used MCC~\autocite{Poisot2023-di}:
+
+\begin{equation}
+    MCC=\frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+\end{equation}
+
+We evaluated links based on the common threshold of 0.5  (see Supplementary note \ref{sec:SI_threshold} for details).
+
+\subsection*{Comparison to transductive models}
+We compared our model to three transductive link prediction models: The \ac{sbm} and connectance, which were previously published~\autocite{Terry2020-wv} and are not based on machine learning, and to a transductive machine learning model we developed (\ac{tlp}). All three models train and test on each network separately. The models do not separate links between the train and test set. In the train set subsampled links are classified as non-existing links, while in the test set there is a relabeling of the subsampled links to existing links.
+
+In \textit{\ac{sbm}}, nodes are partitioned into blocks or groups, and the probability of a link between any two nodes depends on the blocks to which they belong~\autocite{Holland1983-fe}. The probability of a link between two nodes is higher if they belong to the same block, reflecting community structure. The \acl{sbm} is a degree corrected bipartite \ac{sbm} algorithm, which accounts for the degree heterogeneity within the blocks. The \textit{connectance model} is a model used to describe the pattern of interactions in ecological networks. It assigns a connectivity value to each species, reflecting its propensity to interact with others. The connectivity values are estimated by using maximum likelihood optimization, which adjusts the parameters to best fit the observed interaction data~\autocite{Terry2020-wv}. We used the R package cassandRa (https://github.com/jcdterry/cassandRa) to predict links using these two models. The \ac{tlp} model we developed uses random forest with a standard 3-fold cross validation with hyper-parameters tuning (maximizing f1 score). The model balances the weights of the classes by computing weights inversely proportionally to the frequency of the respective classes.
+
+\subsection*{Estimating the bounds of link prediction performance}
+We evaluate the models' ability to predict links under a range of true missing link values. For a theoretical proportion $p$ (range 0.05-0.5) of ground-truth missing links, the \textbf{number} of missing links is calculated as $L_m=p\times L_{ne}$, where $L_{ne}$ is number of zeros in the original matrix. In the \textit{best case scenario}, we choose $L_m$ FP links and change them to TP. This simulates a scenario in which the model indeed predicted links that were not observed. If $L_{FP}<L_m$ ($L_{FP}$ is the number of FP links) we convert a remainder of $L_m-L_{FP}$ TN links to FN to simulate the scenario in which the links actually existed in nature. In the \textit{worst-case scenario}, we choose $L_m$ TN links and convert their class to FN. This simulates a scenario in which the links actually existed in nature but the model failed to retrieve them. If $L_{TN}<L_m$ ($L_{TN}$ is the number of TN links) we convert a remainder of $L_m-L_{FN}$ FP links to TP. After the conversion of links, we recalculate each evaluation metric (e.g., F1, recall) for each of the two scenarios, to form the upper and lower bounds of model performance per network. 
+
+\subsection*{Code and data availability}
+The data are available in the repository set up in original publication \url{https://osf.io/my9tv/}. The full code and technical descriptions on how to run the pipeline are available on the GitHub repository \url{https://github.com/Ecological-Complexity-Lab/eco_ILP}. 
+
+\section*{Acknowledgments}
+We thank Prof. Peter Mucha for comments and suggestions.
+
+\section*{Funding}
+This work was supported by grants to SP from the Israeli Data Science Initiative, Israel Science Foundation (grant 1281/20), the Human Frontiers Science Program Organization (grant number RGY0064/2022) and the Binational Science Foundation (NSF-BSF grant 2022721)
+ 
+% \subparagraph{To consider:}
+
+% 1. I removed links randomly (and learning them), but in reality there should be some rules in which according to them the missing links are being under sampled (sampling effort/biases). However, the model should be more robust/general this way.
+
+% 2. Many variables can influence the existence of interaction between two species. traits matching, environment, the influence of third-party, niche, abundance, weights(interaction frequency) interaction neutrality, etc. As this information is usually not available, I claim that modeling interactions with extremely good accuracy is even not possible, and what we did is to "juice" the most out of the topology, + it can serve as decent recommendation system?
+
+% 3. I listed many reasons why there isn't enough information, why it is problematic to use networks from different sources.. given all these conditions, one can think that it should not be possible to predict links at all. However, the models achieve \textbf{relatively} good results, emphasising the phenomenon that ecological communities share similar..
+
+\printbibliography[heading=subbibliography, title={References}]
+
+\end{refsection}
+
+\newpage
+
+\appendix
+\setcounter{section}{0}
+\renewcommand{\thesection}{S\arabic{section}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\begin{refsection}
+
+\LARGE{Supplementary Information}
+
+\normalsize
+
+\section*{Supplementary results}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/SI_networks_PCA.pdf}
+    \caption{\textbf{Variation in network structure.} The PCA shows no clear subgrouping of networks by their class, reflecting previous studies using the same data set~\autocite{Michalska-Smith2019-ap,Brimacombe2023-fk}. The PCs were calculated using the topological features we used in the link prediction model.}
+    \label{fig:SI_networks_PCA}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/ILP_vs_TLP_community.pdf}
+    \caption{\textbf{Comparison of model performance per community}. The \acl{ilp} was trained on networks from all communities and tested per community type (the results were qualitatively the same when training and testing was done within the same community type). We compared \ac{ilp} to two transductive previously published models (\acl{sbm} and connectance;~\autocite{Terry2020-wv}) and one transductive machine learning model that we developed (\ac{tlp}). Each boxplot is a distribution of an evaluation metric using a 0.5 classification threshold, bedsides the ROC AUC and \ac{pr} AUC. Each data point is a network and boxplots contain networks from all the five outer folds. BA is balanced accuracy. See definitions of evaluation metrics in the Methods.}
+    \label{fig:ILP_vs_TLP_community}
+\end{figure}
+\FloatBarrier
+
+
+\begin{figure}[ht]
+\centering
+    \includegraphics[width=\textwidth]{images/feature_importance.pdf}
+   \caption{\textbf{Feature importance}. Each bar presents the average value of feature importance across the five folds for the random forest model. Error bars depict minimum and maximum. HL are higher-level trophic species that consume resources (pollinators, parasites, seed dispersers, herbivores). LL are lower-level trophic species (resources) (plants, hosts, seeds).}
+   \label{fig:SI_feature_importance}
+\end{figure}
+
+
+\clearpage
+
+\begin{table}[ht]
+    \centering
+    \caption{\textbf{Summary of network properties.} The table provides an overview of the network properties for different ecological communities, detailing each variable's mean, median, and range values. $N$: number of nodes; $L_e$: number of existing links; $L_{ne}$: number of nonexisting links; $C$: connectance, $C=L_e/(L_e+L_{ne})$}
+    \label{tab:SI_networks_summary_properties}
+    \begin{tabular}{ccccc}
+        \toprule
+        Variable & Community & Mean & Median & Range \\
+        \midrule
+        \multirow{4}{*}{$N$} & Host-Parasite & 37.58 & 33 & 20-137 \\
+                             & Plant-Herbivore & 42.53 & 37 & 21-78 \\
+                             & Plant-Pollinator & 43.36 & 36 & 20-205 \\
+                             & Plant-Seed Dispersers & 43.96 & 36 & 20-213 \\
+        \multirow{4}{*}{$L_e$} & Host-Parasite & 82.86 & 63 & 19-490 \\
+                                & Plant-Herbivore & 67.69 & 42.5 & 22-294 \\
+                                & Plant-Pollinator & 72.94 & 52 & 21-631 \\
+                                & Plant-Seed Dispersers & 98.59 & 72 & 21-720 \\
+        \multirow{4}{*}{$L_{ne}$} & Host-Parasite & 1622.08 & 991.5 & 349-18279 \\
+                                  & Plant-Herbivore & 1997.22 & 1332.5 & 409-5996 \\
+                                  & Plant-Pollinator & 2394.52 & 1260 & 363-41600 \\
+                                  & Plant-Seed Dispersers & 2585.2 & 1238 & 362-44687 \\
+        \multirow{4}{*}{$C$} & Host-Parasite & 0.28 & 0.25 & 0.11-0.61 \\
+                             & Plant-Herbivore & 0.2 & 0.165 & 0.1-0.47 \\
+                             & Plant-Pollinator & 0.22 & 0.2 & 0.1-0.42 \\
+                             & Plant-Seed Dispersers & 0.28 & 0.27 & 0.1-0.71 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[ht]
+    \centering
+    \caption{Results of Kruskal-Wallis test to detect differences between communities in multiple evaluation metrics. The KW test was performed for each metric separately, with communities as factor levels. Dunn post-hoc tests are in Table \ref{tab:SI_KW_communities_Dunn}}
+    \begin{tabular}{|l|c|c|}
+        \hline
+        Metric & $\chi^2$ & P Value \\
+        \hline
+        Balanced Accuracy & 5.729 & 0.126 \\
+        F1 & 29.460 & $1.79 \times 10^{-6}$ \\
+        MCC & 11.310 & 0.0102 \\
+        PR AUC & 47.862 & $2.28 \times 10^{-10}$ \\
+        Precision & 25.517 & $1.20 \times 10^{-5}$ \\
+        Recall & 37.908 & $2.96 \times 10^{-8}$ \\
+        ROC AUC & 7.053 & 0.0702 \\
+        Specificity & 37.557 & $3.51 \times 10^{-8}$ \\
+        \hline
+    \end{tabular}
+    \label{tab:SI_KW_communities}
+\end{table}
+
+\begin{table}[ht]
+    \centering
+    \caption{Results of Dunn posthoc tests for the Kruskal-Wallis pairwise comparisons between communities in multiple evaluation metrics (Table \ref{tab:SI_KW_communities}). Only significant differences are presented here. Note that the median values are close for some comparisons despite being statistically significant (e.g., precision for Host-Parasite vs. Plant-Pollinator). A visualization of the values and their distributions is in the main text, in Fig. \ref{fig:communities}.}
+    \begin{tabular}{|l|l|l|c|c|c|}
+        \hline
+        Metric & Community 1 & Community 2 & Median 1 & Median 2 & P Adjusted \\
+        \hline
+        Precision & Host-Parasite & Plant-Pollinator & 0.17 & 0.15 & $4.10 \times 10^{-11}$ \\
+        Precision & Plant-Herbivore & Plant-Pollinator & 0.18 & 0.15 & $1.51 \times 10^{-7}$ \\
+        Precision & Plant-Herbivore & Plant-Seed Dispersers & 0.18 & 0.18 & $4.77 \times 10^{-2}$ \\
+        Precision & Plant-Pollinator & Plant-Seed Dispersers & 0.15 & 0.18 & $1.04 \times 10^{-18}$ \\
+        Recall & Host-Parasite & Plant-Pollinator & 0.67 & 0.56 & $4.10 \times 10^{-11}$ \\
+        Recall & Plant-Herbivore & Plant-Pollinator & 0.51 & 0.56 & $1.51 \times 10^{-7}$ \\
+        Recall & Plant-Herbivore & Plant-Seed Dispersers & 0.51 & 0.67 & $4.77 \times 10^{-2}$ \\
+        Recall & Plant-Pollinator & Plant-Seed Dispersers & 0.56 & 0.67 & $1.04 \times 10^{-18}$ \\
+        PR AUC & Host-Parasite & Plant-Pollinator & 0.37 & 0.36 & $4.10 \times 10^{-11}$ \\
+        PR AUC & Plant-Herbivore & Plant-Pollinator & 0.35 & 0.36 & $1.51 \times 10^{-7}$ \\
+        PR AUC & Plant-Herbivore & Plant-Seed Dispersers & 0.35 & 0.37 & $4.77 \times 10^{-2}$ \\
+        PR AUC & Plant-Pollinator & Plant-Seed Dispersers & 0.36 & 0.37 & $1.04 \times 10^{-18}$ \\
+        Specificity & Host-Parasite & Plant-Pollinator & 0.78 & 0.83 & $4.10 \times 10^{-11}$ \\
+        Specificity & Plant-Herbivore & Plant-Pollinator & 0.88 & 0.83 & $1.51 \times 10^{-7}$ \\
+        Specificity & Plant-Herbivore & Plant-Seed Dispersers & 0.88 & 0.80 & $4.77 \times 10^{-2}$ \\
+        Specificity & Plant-Pollinator & Plant-Seed Dispersers & 0.83 & 0.80 & $1.04 \times 10^{-18}$ \\
+        F1 & Host-Parasite & Plant-Pollinator & 0.28 & 0.24 & $4.10 \times 10^{-11}$ \\
+        F1 & Plant-Herbivore & Plant-Pollinator & 0.27 & 0.24 & $1.51 \times 10^{-7}$ \\
+        F1 & Plant-Herbivore & Plant-Seed Dispersers & 0.27 & 0.28 & $4.77 \times 10^{-2}$ \\
+        F1 & Plant-Pollinator & Plant-Seed Dispersers & 0.24 & 0.28 & $1.04 \times 10^{-18}$ \\
+        MCC & Host-Parasite & Plant-Pollinator & 0.25 & 0.22 & $4.10 \times 10^{-11}$ \\
+        MCC & Plant-Herbivore & Plant-Pollinator & 0.22 & 0.22 & $1.51 \times 10^{-7}$ \\
+        MCC & Plant-Herbivore & Plant-Seed Dispersers & 0.22 & 0.25 & $4.77 \times 10^{-2}$ \\
+        MCC & Plant-Pollinator & Plant-Seed Dispersers & 0.22 & 0.25 & $1.04 \times 10^{-18}$ \\
+        \hline
+    \end{tabular}
+    \label{tab:SI_KW_communities_Dunn}
+\end{table}
+
+
+% \begin{table}[ht]
+%     \centering
+%     \caption{Results of Kruskal-Wallis test to detect differences in evaluation when training with different communities. The KW test was performed for each testing community separately, with training communities as factor levels. Dunn post-hoc tests are in Table \ref{tab:SI_KW_cross_Dunn}}
+%     \begin{tabular}{|l|l|c|c|}
+%         \hline
+%         Metric & Type Test & $\chi^2$ & P\_Value \\
+%         \hline
+%         F1 & All & 0.954 & 0.9166 \\
+%         F1 & Host-Parasite & 69.094 & $3.53 \times 10^{-14}$ \\
+%         F1 & Plant-Herbivore & 52.942 & $8.76 \times 10^{-11}$ \\
+%         F1 & Plant-Pollinator & 40.044 & $4.24 \times 10^{-8}$ \\
+%         F1 & Plant-Seed Dispersers & 58.617 & $5.66 \times 10^{-12}$ \\
+%         MCC & All & 0.582 & 0.965 \\
+%         MCC & Host-Parasite & 23.549 & $9.83 \times 10^{-5}$ \\
+%         MCC & Plant-Herbivore & 17.817 & $1.3 \times 10^{-3}$ \\
+%         MCC & Plant-Pollinator & 11.865 & $1.84 \times 10^{-2}$ \\
+%         MCC & Plant-Seed Dispersers & 24.887 & $5.30 \times 10^{-5}$ \\
+%         \hline
+%     \end{tabular}
+%     \label{tab:SI_KW_cross}
+% \end{table}
+
+
+% \begin{table}[ht]
+%     \centering
+%     \caption{Significant results of Dunn posthoc tests for pairwise comparisons between training communities for each testing community. The Kruskal-Wallis test results are in Table \ref{tab:SI_KW_cross}. Only significant differences are presented here. Note that the median values are close for some comparisons despite begin statistically significant. A visualization of the values and their distributions is in the main text, in Fig. \ref{fig:cross_community_prediction}.}
+%     \footnotesize
+%     \begin{tabular}{|l|l|l|l|c|c|c|c|}
+%         \hline
+%         Metric & Testing Community & Training Community 1 & Training Community 2 & Median 1 & Median 2 & Z & P Adjusted \\
+%         \hline
+%         F1 & Host-Parasite & All & Plant-Pollinator & 0.26 & 0.24 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         F1 & Host-Parasite & All & Plant-Seed Dispersers & 0.26 & 0.30 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         F1 & Host-Parasite & Host-Parasite & Plant-Pollinator & 0.33 & 0.24 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         F1 & Host-Parasite & Plant-Herbivore & Plant-Pollinator & 0.30 & 0.24 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         F1 & Host-Parasite & Plant-Herbivore & Plant-Seed Dispersers & 0.30 & 0.30 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         F1 & Host-Parasite & Plant-Pollinator & Plant-Seed Dispersers & 0.24 & 0.30 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         F1 & Plant-Herbivore & All & Plant-Pollinator & 0.26 & 0.23 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         F1 & Plant-Herbivore & All & Plant-Seed Dispersers & 0.26 & 0.29 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         F1 & Plant-Herbivore & Host-Parasite & Plant-Pollinator & 0.30 & 0.23 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         F1 & Plant-Herbivore & Plant-Herbivore & Plant-Pollinator & 0.32 & 0.23 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         F1 & Plant-Herbivore & Plant-Herbivore & Plant-Seed Dispersers & 0.32 & 0.29 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         F1 & Plant-Herbivore & Plant-Pollinator & Plant-Seed Dispersers & 0.23 & 0.29 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         F1 & Plant-Pollinator & All & Plant-Pollinator & 0.26 & 0.23 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         F1 & Plant-Pollinator & All & Plant-Seed Dispersers & 0.26 & 0.26 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         F1 & Plant-Pollinator & Host-Parasite & Plant-Pollinator & 0.24 & 0.23 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         F1 & Plant-Pollinator & Plant-Herbivore & Plant-Pollinator & 0.23 & 0.23 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         F1 & Plant-Pollinator & Plant-Herbivore & Plant-Seed Dispersers & 0.23 & 0.26 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         F1 & Plant-Pollinator & Plant-Pollinator & Plant-Seed Dispersers & 0.23 & 0.26 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         F1 & Plant-Seed Dispersers & All & Plant-Pollinator & 0.27 & 0.26 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         F1 & Plant-Seed Dispersers & All & Plant-Seed Dispersers & 0.27 & 0.31 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         F1 & Plant-Seed Dispersers & Host-Parasite & Plant-Pollinator & 0.30 & 0.26 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         F1 & Plant-Seed Dispersers & Plant-Herbivore & Plant-Pollinator & 0.31 & 0.26 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         F1 & Plant-Seed Dispersers & Plant-Herbivore & Plant-Seed Dispersers & 0.31 & 0.31 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         F1 & Plant-Seed Dispersers & Plant-Pollinator & Plant-Seed Dispersers & 0.26 & 0.31 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         MCC & Host-Parasite & All & Plant-Pollinator & 0.24 & 0.22 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         MCC & Host-Parasite & All & Plant-Seed Dispersers & 0.24 & 0.26 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         MCC & Host-Parasite & Host-Parasite & Plant-Pollinator & 0.27 & 0.22 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         MCC & Host-Parasite & Plant-Herbivore & Plant-Pollinator & 0.26 & 0.22 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         MCC & Host-Parasite & Plant-Herbivore & Plant-Seed Dispersers & 0.26 & 0.26 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         MCC & Host-Parasite & Plant-Pollinator & Plant-Seed Dispersers & 0.22 & 0.26 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         MCC & Plant-Herbivore & All & Plant-Pollinator & 0.23 & 0.22 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         MCC & Plant-Herbivore & All & Plant-Seed Dispersers & 0.23 & 0.26 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         MCC & Plant-Herbivore & Host-Parasite & Plant-Pollinator & 0.26 & 0.22 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         MCC & Plant-Herbivore & Plant-Herbivore & Plant-Pollinator & 0.28 & 0.22 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         MCC & Plant-Herbivore & Plant-Herbivore & Plant-Seed Dispersers & 0.28 & 0.26 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         MCC & Plant-Herbivore & Plant-Pollinator & Plant-Seed Dispersers & 0.22 & 0.26 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         MCC & Plant-Pollinator & All & Plant-Pollinator & 0.24 & 0.21 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         MCC & Plant-Pollinator & All & Plant-Seed Dispersers & 0.24 & 0.23 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         MCC & Plant-Pollinator & Host-Parasite & Plant-Pollinator & 0.21 & 0.21 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         MCC & Plant-Pollinator & Plant-Herbivore & Plant-Pollinator & 0.22 & 0.21 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         MCC & Plant-Pollinator & Plant-Herbivore & Plant-Seed Dispersers & 0.22 & 0.23 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         MCC & Plant-Pollinator & Plant-Pollinator & Plant-Seed Dispersers & 0.21 & 0.23 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         MCC & Plant-Seed Dispersers & All & Plant-Pollinator & 0.23 & 0.23 & 5.79 & $3.54 \times 10^{-8}$ \\
+%         MCC & Plant-Seed Dispersers & All & Plant-Seed Dispersers & 0.23 & 0.27 & -4.18 & $1.47 \times 10^{-4}$ \\
+%         MCC & Plant-Seed Dispersers & Host-Parasite & Plant-Pollinator & 0.27 & 0.23 & 6.84 & $4.10 \times 10^{-11}$ \\
+%         MCC & Plant-Seed Dispersers & Plant-Herbivore & Plant-Pollinator & 0.27 & 0.23 & 5.54 & $1.51 \times 10^{-7}$ \\
+%         MCC & Plant-Seed Dispersers & Plant-Herbivore & Plant-Seed Dispersers & 0.27 & 0.27 & -2.59 & $4.77 \times 10^{-2}$ \\
+%         MCC & Plant-Seed Dispersers & Plant-Pollinator & Plant-Seed Dispersers & 0.23 & 0.27 & -9.01 & $1.04 \times 10^{-18}$ \\
+%         \hline
+%     \end{tabular}
+%     \label{tab:SI_KW_cross_Dunn}
+% \end{table}
+
+
+
+\clearpage
+
+\section*{Supplementary notes on methods}
+
+\subsection*{Models applied} \label{sec:SI_models}
+Selecting a machine learning model a priori can be challenging~\autocite{Raschka2018-hg}. There is no one-size-fits-all solution; different models have different strengths and weaknesses, and knowing which model will perform better is often impossible. Some models may perform well on particular data types, while others may perform better on different ones. Hence, model selection often requires some experimentation. In practice, trying multiple models and comparing their performance is often a good idea before deciding on a final model. Furthermore, using a model ensemble---a technique in which multiple models are combined---can often lead to better results than a single model~\autocite{Kotsiantis2006-ot}. In this study, we tried multiple models and their ensemble. For the ensemble, we averaged the probabilities for each prediction. The models performed similarly overall, and their ensemble did not improve the results (Fig. \ref{fig:SI_models}). Therefore, in the main text, we present results for random forest. In this section, we describe the models we used. We present model hyperparameters in Table \ref{tab:SI_hyperparams}.
+
+To understand how these models work, it is necessary to first explain the terms bagging and boosting~\autocite{Sagi2018-wa}, two popular ensemble learning techniques. The key difference between bagging and boosting lies in how they combine multiple models to make predictions. Bagging, which stands for bootstrap aggregating, is a parallel ensemble technique. In bagging, multiple base models (multiple instances of the same algorithm) are trained independently on different random subsets of the training data using bootstrap sampling (sampling with replacement). The outputs of the individual models are then combined, often through a voting mechanism or by taking the average of their predictions, to produce a single output. Bagging is often used with decision trees as it has been repetitively shown to outperform other models. Boosting, on the other hand, is a sequential ensemble technique. Boosting works by iteratively training multiple weak models on modified versions of the training data, with each subsequent model trying to correct the errors of the previous models, focusing on the examples that the previous models misclassified. The training data is re-weighted at each iteration so that the misclassified examples receive higher weights and are given more importance in subsequent iterations. The final prediction of the boosted model is a weighted combination of the predictions of all the individual models, with the weights determined by the performance of each model on the training data. More weight is given to models that achieved higher performance.
+
+\paragraph{Logistic regression.} This generalized linear model uses a logistic function to model a binary dependent variable. The logistic function maps the linear combination of input variables to a discrete binary value between 0 and 1, which is interpreted as the probability of the input belonging to a particular class. During training, the logistic regression algorithm finds the input variables' best parameters (coefficients) by minimizing the error between the predicted probabilities and the actual class labels in the training data. Logistic regression is easy to interpret and implement without necessarily compromising performance~\autocite{Levy2020-sm}.
+
+\paragraph{Random Forest.}~\autocite{Breiman2001-ik,Biau2016-ns} . This is a specific version of a bagging method with decision trees. A random forest model creates a collection of decision trees and combines their predictions to produce a final output. Decision tree models create a tree-like model of decisions and their possible consequences, with each internal node representing a feature, each branch representing a decision rule, and each leaf node representing the outcome class label. The algorithm starts at the root of the tree. It recursively splits the data into subsets using a feature that provides the most information gain at that stage until it reaches a leaf node, representing the predicted class label for the input data. Each tree in the random forest ensemble is trained on a different random subset of the data and features, and the final output is the combination of the predictions of all the decision trees, usually made by either averaging the results for regression tasks or by taking a majority vote for classification tasks.
+
+\paragraph{XGBoost.} This gradient-boosting tree-based algorithm is designed for speed and performance ~\autocite{Chen2016-oy}. Gradient boosting~\autocite{Friedman2001-fc} differs from other boosting algorithms in the way it calculates the weights of the models. Specifically, gradient boosting uses the gradient descent optimization algorithm to minimize the model's loss function. At each iteration, the algorithm calculates the (negative) gradient of the loss function with respect to the predictions of the previous ensemble. It uses this gradient to adjust the weights of the new model. The negative gradient represents the direction of the steepest descent for the loss function, which is the direction that will reduce the loss the most. By fitting a new tree to the negative gradient, gradient boosting focuses on the examples misclassified in the previous ensemble and attempts to correct those errors.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/SI_models.pdf}
+    \caption{\textbf{Model comparison.} We evaluated link prediction using various models. Average is a model ensemble. Overall, model choice did not qualitatively affect the results. Therefore, we present results of random forest throughout the main text.}
+    \label{fig:SI_models}
+\end{figure}
+
+\begin{table}[]
+\caption{\textbf{Summary of model hyperparameters.} The table provides an overview of the best values for different parameters across five folds for each model. We optimized hyperparameters using a random search. We used the F1-score as the performance metric to evaluate the hyperparameter combinations. RFC: RandomForestClassifier; LR: LogisticRegression; XGB: XGBClassifier.}
+\label{tab:SI_hyperparams}
+\tiny
+\begin{tabular}{llllllll}
+\toprule
+\textbf{Model} & \textbf{Parameter} & \textbf{Fold 1} & \textbf{Fold 2} & \textbf{Fold 3} & \textbf{Fold 4} & \textbf{Fold 5} & \textbf{Range} \\ \hline
+RFC & n\_estimators & 300 & 100 & 20 & 100 & 300 & {[}10, 15, 20, 50, 100, 300{]} \\
+RFC & min\_samples\_split & 10 & 10 & 5 & 1 & 3 & {[}1, 2, 3, 4, 5, 10{]} \\
+RFC & min\_samples\_leaf & 8 & 12 & 4 & 3 & 4 & {[}3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20{]} \\
+RFC & max\_samples & 0.6 & 0.9 & 0.9 & 0.3 & 0.6 & {[}0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9{]} \\
+RFC & max\_leaf\_nodes & 8 & 64 & 128 & 64 & 16 & {[}2, 4, 8, 16, 32, 64, 128{]} \\
+RFC & max\_features & log2 & log2 & log2 & log2 & log2 & {[}'sqrt', 'log2'{]} \\
+RFC & max\_depth & 5 & 5 & 50 & 7 & 5 & {[}3, 5, 7, 10, 20, 30, 40, 50, 60, None{]} \\
+RFC & criterion & gini & entropy & entropy & gini & gini & {[}'gini', 'entropy'{]} \\
+RFC & bootstrap & True & True & True & True & True & {[}True{]} \\ \hline
+LR & solver & saga & saga & saga & saga & saga & {[}'newton-cg', 'lbfgs', 'sag'{]} \\
+LR & penalty & l2 & l2 & l2 & l1 & l1 & {[}'l2', 'none'{]} \\
+LR & max\_iter & 300 & 300 & 300 & 300 & 300 & {[}300{]} \\
+LR & C & 0.1 & 0.01 & 0.001 & 0.001 & 0.001 & {[}100, 10, 1.0, 0.7, 0.5, 0.3, 0.1, 0.01, 0.001{]} \\ \hline
+XGB & tree\_method & hist & hist & hist & hist & hist & {[}'hist'{]} \\
+XGB & subsample & 0.5 & 0.1 & 1.0 & 0.30000000000000004 & 0.6 & {[}0.1, 0.2, 0.30000000000000004, 0.4, 0.5, 0.6, 0.7000000000000001, 0.8, 0.9, 1.0{]} \\
+XGB & reg\_lambda & 1e-05 & 100 & 100 & 100 & 0.01 & {[}0, 1e-05, 0.01, 0.1, 1, 100{]} \\
+XGB & reg\_alpha & 1 & 0 & 0 & 0.01 & 1 & {[}0, 1e-05, 0.01, 0.1, 1, 100{]} \\
+XGB & objective & binary:logistic & binary:logistic & binary:logistic & binary:logistic & binary:logistic & {[}'binary:logistic'{]} \\
+XGB & n\_estimators & 70 & 70 & 80 & 90 & 80 & {[}10, 20, 30, 40, 50, 60, 70, 80, 90, 100{]} \\
+XGB & max\_depth & 7 & 3 & 5 & 5 & 3 & {[}1, 3, 5, 7, 9, 11, 13, 15, 17, 19, None{]} \\
+XGB & learning\_rate & 0.001 & 0.05 & 0.3 & 0.1 & 0.05 & {[}0.001, 0.01, 0.05, 0.1, 0.2, 0.3{]} \\
+XGB & gamma & 0.3 & 0 & 0.1 & 1 & 1 & {[}0, 0.1, 0.3, 0.5, 1{]} \\
+XGB & colsample\_bytree & 0.2 & 0.1 & 0.1 & 0.1 & 0.5 & {[}0.1, 0.2, 0.30000000000000004, 0.4, 0.5, 0.6, 0.7000000000000001, 0.8, 0.9, 1.0{]} \\
+XGB & booster & gbtree & gbtree & gbtree & gbtree & gbtree & {[}'gbtree'{]} \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+\subsection*{Cost-sensitive learning} \label{sec:SI_cost_sensitive}
+
+Cost-sensitive learning uses a parameter that the algorithm considers during the learning process. The penalty is the cost, which is minimized during the training process. This approach allows dealing with imbalance while ignoring less samples~\autocite{Lopez2012-uw}. The scikit-learn package~\autocite{Pedregosa2011-bw} has a built-in support for cost-sensitive learning. This implementation provides custom weights to a model's classes or samples during training. Depending on the learning algorithm, the loss function is modified to penalize mistakes according to the provided weights, such that higher weights lead to higher penalizing. Because in our study, the minority class is the existing links, these are assigned higher importance by using higher weights. Specifically, each class automatically gets a weight of 1 but can be set with a higher weight. For instance, a class with a weight 2 will have double importance. We aimed for `balanced' weights, which are proportional to the classes' frequency. For instance, if the training set contains 20 more times non-existing than existing links, then existing links will get 20 times more importance.
+
+\subsection*{Details on model evaluation metrics}  \label{sec:SI_evaluation}
+In binary classification, the terms ``positive'' and ``negative'' refer to the two possible outcomes, where the positive class is typically used to denote the class of interest. Here, the positive class is the presence of a link. There are four possible prediction outcomes defined for binary classification models, computed by comparing the predicted and actual values of the model's outputs (Fig. \ref{fig:SI_predictions}):
+
+\begin{itemize}
+    \item \textbf{\textit{True Positives} (\textit{TP})}: instances correctly predicted as the positive class. That is, sub-sampled links that were correctly predicted as existing links.
+
+    \item \textbf{\textit{True Negatives} (\textit{TN})}: instances correctly predicted as the negative class. That is, non-existing links that were correctly predicted as non-existing links.
+
+    \item \textbf{\textit{False Positives} (\textit{FP})}: instances falsely predicted as the positive class. That is, non-existing links that were incorrectly predicted as existing links. This is also known as a Type I error. 
+
+    \item \textbf{\textit{False Negatives} (\textit{FN})}: instances falsely predicted as the negative class. That is, sub-sampled links that were incorrectly predicted as non-existing links. This is also known as a Type II error. 
+\end{itemize}
+
+
+The output of machine learning models is a probability of a link (Fig. \ref{fig:SI_predictions}). This continuous output is transformed into a categorical (positive / negative) prediction via a threshold. The threshold is typically 0.5, with values $>0.5$ considered a link (and values below as a no-link). Therefore, classification into the four categories above depends on the threshold applied. The relationship between true positives, false positives, false negatives, and true negatives are summarized in a \textit{confusion matrix} from which the following metrics are calculated.
+
+\textbf{\textit{ROC-AUC}}: The area under the receiver operating characteristic curve is a graphical representation of the actual positive rate (y axis) versus the false positive rate (x axis) of a model across different decision thresholds. The ROC-AUC score ranges from 0 to 1, where a score of 1 represents a perfect classification model, while a score of 0.5 represents a model with random guessing.
+
+Although the ROC-AUC is a common measure, the number of true negatives in imbalanced data sets is very large, so even with a substantial number of false positives, the false positive rate might remain relatively small. This means that the ROC curve might not fully capture the cost of misclassifying a substantial number of the minority class instances. A better way to evaluate predictions in imbalanced data sets is by combining precision and recall metrics. Precision and recall provide a more granular understanding of a model's performance. They emphasize the importance of being confident about the most crucial prediction. These metrics act as safeguards against models that might achieve high overall accuracy/ROC-AUC by merely predicting the majority class, which, as discussed in section \ref{sec:imbalance}, is an easy task in imbalanced data.
+
+\textbf{\textit{Precision}}: The proportion of correctly predicted positive instances out of all positive predictions:
+
+\begin{equation}
+    \frac{TP}{TP+FP}
+\end{equation}
+
+Precision is important when false positives are costly. For example, falsely predicting an interaction can lead ecologists to spend research efforts trying to validate a forbidden link in nature.
+
+\textbf{\textit{Recall or sensitivity}}: The proportion of correctly predicted positive instances out of all actual positive instances. Recall is important when false negatives are costly. For example, not predicting missing links can have consequences for conservation.
+
+\begin{equation}
+    \frac{TP}{TP+FN}
+\end{equation}
+
+\textbf{\textit{PR AUC}}: There is a tradeoff between precision and recall, which depends on the prediction threshold. To evaluate this tradeoff, the area under the \ac{pr} curve provides a single number that summarizes the overall performance of a model across all possible classification thresholds. Like the ROC-AUC curve, the \ac{pr} curve is calculated across all thresholds.
+
+\textbf{\textit{F1-score}}: Another way to evaluate the precision-recall tradeoff is via a balanced measure of performance that reflects the classifier's ability to identify true positive instances while avoiding false positives. The F1-score is defined as the harmonic mean between precision and recall:
+
+\begin{equation}
+F1=\frac{2*precision*recall}{precision+recall}    
+\end{equation}
+
+\textbf{\textit{Specificity}}: The proportion of correctly predicted negative instances out of all actual negative instances:
+
+\begin{equation}
+    \frac{TN}{TN+FP}
+\end{equation}
+While recall and precision focus on true positives, specificity focuses on the retrieval of true negatives.
+
+\textbf{\textit{Balanced accuracy}}: Balanced accuracy aims to balance the prediction ability for links and no-links, particularly in situations where the classes are imbalanced. It is the average of the true positive rate (sensitivity or recall) and the true negative rate (specificity):
+
+\begin{equation}
+    \frac{recall+specificity}{2}
+\end{equation}
+
+\textbf{\textit{MCC}}: The Matthews Correlation Coefficient (MCC) takes into account the balance ratios of the four confusion matrix categories (TP, TN, FP, FN), and is, therefore, a balanced measure that can be used even if the classes are of very different sizes~\autocite{Poisot2023-di}.  MCC values range from $-1$ to $+1$. A coefficient of $+1$ indicates a perfect prediction, 0 indicates no better than a random prediction, and $-1$ indicates total disagreement between prediction and observation.
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/SI_predictions.pdf}
+    \caption{\textbf{Link prediction example for a host-parasite network.} Values inside matrix cells are the predicted link probabilities. The sub-sampled links are marked with X. Cells above the 0.5 threshold are classified as links. Correct and wrong classifications are colored green and red, respectively. Therefore, true positives are green with X, true negatives are green, false positives are red (no X) and false negatives are red with X.
+    }
+    \label{fig:SI_predictions}
+\end{figure}
+
+\subsection*{Exploration of the classification threshold} \label{sec:SI_threshold}
+
+Given ecological networks' imbalanced and noisy nature, we explored how the classification threshold affects the \ac{pr} tradeoff. As a first step, we plotted the link probabilities generated by the model. The non-existing links were generally correctly classified ($\approx 0.83\%$ out of 183K non-links; Fig. \ref{fig:SI_probabilities}A). This is expected in imbalanced data sets. However, for the subsampled links, only $\approx 0.63\%$ out of 9K were classified correctly (Fig. \ref{fig:SI_probabilities}B). This mismatch underlies the tradeoff between precision and recall. Further exploration of the precision-recall tradeoff (Fig. \ref{fig:SI_PR_tradeoff}) indicated that there is no apparent threshold to choose from, and so we decided to use the common value of 0.5. In a more detailed examination of each community separately, as shown in Fig. \ref{fig:SI_probabilities_community}, we observed a pronounced right-skewed distribution of the sub-sampled links. Specifically, there was a more apparent separation between the two link types in both host-parasite and plant-seed disperser networks.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/SI_probabilities.pdf}
+    \caption{\textbf{Distribution of link probabilities obtained from the model.} The histograms depict the distribution of the predicted probabilities for our binary classification task, representing the two classes in the test set: non-existing links (A) and sub-sampled links (B). The x-axis represents the predicted probabilities ranging from 0 to 1, while the y-axis represents the frequency of the observations. The dashed red line represents the decision threshold of 0.5.}
+    \label{fig:SI_probabilities}
+    \end{figure}
+
+\begin{figure}[ht]
+\centering
+    \includegraphics[width=\textwidth]{images/SI_PR_tradeoff.pdf}
+    \caption{\textbf{The precision-recall tradeoff as a function of classification threshold.} The tradeoff is presented when testing on all communities (A) or per community type (B-D). Each data point on the curve corresponds to a distinct cutoff threshold value (x-axis).}
+    \label{fig:SI_PR_tradeoff}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/SI_probabilities_community.pdf}
+    \caption{\textbf{Distribution of link probabilities across different ecological communities.} The kernel density estimate (KDE) curves of the three communities: (A) Host-parasite networks, (B) Plant-pollinator networks, and (C) plant-speed disperser networks. The distributions for non-existing links and sub-sampled links are depicted in blue and orange, respectively. The x-axis represents the predicted probabilities ranging from 0 to 1, while the y-axis denotes the density estimation of the observations. A dashed red line marks the decision threshold of 0.5. The overlap between the blue and orange distributions represents areas of prediction ambiguity. In regions where non-existing links (blue) surpass the decision threshold, false positives emerge, negatively influencing precision. Conversely, in the region where sub-sampled links (orange) fall below the threshold, it results in false negatives, negatively influencing recall.}
+    \label{fig:SI_probabilities_community}
+\end{figure}
+
+\newpage
+\clearpage
+
+\printbibliography[heading=subbibliography, title={Appendix References}]
+
+\end{refsection}
+
+\end{document}
+
+
+% \subsection{Feature importance} \label{sec:SI_importance}
+
+% Before running the model we rescaled the features. We used the Min-Max Scaling technique, mathematically represented by the formula:
+% \begin{equation}
+%     X_{\text{scaled}} = \frac{X - X_{\text{min}}}{X_{\text{max}} - X_{\text{min}}}
+% \end{equation}
+% where \(X_{\text{scaled}}\) is the transformed value, \(X\) is the original value, and \(X_{\text{min}}\) and \(X_{\text{max}}\) are the minimum and maximum values in the feature column, respectively. In parallel, to handle categorical features in our data set, we opted for One-Hot Encoding, a process that converts each unique category value into a separate feature column, filled with binary indicators representing the presence (or absence) of the category value in the original feature column.
+
+% We calculated feature importance as follows:
+
+% \textbf{Logistic Regression:} feature importance was determined by the magnitude of the coefficients (weights). A larger absolute value of the coefficient indicates a higher influence of the corresponding feature on the prediction. The sign of the coefficient (positive or negative) indicates the direction of the relationship between the feature and the target.
+
+% \textbf{RandomForestClassifier:} feature importance was computed based on the average decrease in Gini impurity across all trees. Features that are more important are used more frequently and result in significant improvements in node purity.
+
+% \textbf{XGBoostClassifier:} feature importance was computed as the average gain across all splits where a feature is used.
+
+% \begin{figure}[ht]
+%     \centering
+%     \includegraphics[width=\textwidth]{images/SI_split_set}
+    
+%     \caption{\textbf{boxplot representation of various performance metrics across different community train-test splits.} Each plot within the grid present the distribution of metric values, with individual boxes representing the metrics roc auc, pr auc, precision, recall, and F1. The columns correspond to the unique communities used in the training set, while the rows represent those in the testing set. The central black points in each box represent the mean value for the respective metric.}
+%     \label{fig:SI_split_set}
+% \end{figure}
