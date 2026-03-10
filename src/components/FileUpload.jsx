@@ -1,34 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
 
-/** Recursively collect all .tex File objects from a FileSystemDirectoryEntry */
-function readDirEntry(entry) {
-  return new Promise((resolve) => {
-    const results = []
-    const reader = entry.createReader()
-    function readBatch() {
-      reader.readEntries((entries) => {
-        if (entries.length === 0) {
-          resolve(results)
-          return
-        }
-        const promises = entries.map((e) => {
-          if (e.isFile && e.name.endsWith('.tex')) {
-            return new Promise((res) => e.file((f) => res([f]), () => res([])))
-          } else if (e.isDirectory) {
-            return readDirEntry(e)
-          }
-          return Promise.resolve([])
-        })
-        Promise.all(promises).then((arrays) => {
-          arrays.forEach((arr) => results.push(...arr))
-          readBatch()
-        })
-      })
-    }
-    readBatch()
-  })
-}
-
 /** Read File objects into { name: content } map */
 function readFileObjects(fileObjects, onFilesAdded) {
   if (fileObjects.length === 0) return
@@ -47,29 +18,15 @@ function readFileObjects(fileObjects, onFilesAdded) {
   })
 }
 
-export default function FileUpload({ files, mainFile, onFilesAdded, onRemoveFile, onSetMain }) {
+export default function FileUpload({ files, mainFile, compareFile, onFilesAdded, onRemoveFile, onSetMain, onSetCompare }) {
   const [dragging, setDragging] = useState(false)
   const inputRef = useRef(null)
 
-  const handleDrop = useCallback(async (e) => {
+  const handleDrop = useCallback((e) => {
     e.preventDefault()
     setDragging(false)
-
-    const items = Array.from(e.dataTransfer.items)
-    const allFiles = []
-
-    await Promise.all(items.map(async (item) => {
-      const entry = item.webkitGetAsEntry?.()
-      if (!entry) return
-      if (entry.isDirectory) {
-        const found = await readDirEntry(entry)
-        allFiles.push(...found)
-      } else if (entry.isFile && entry.name.endsWith('.tex')) {
-        await new Promise((res) => entry.file((f) => { allFiles.push(f); res() }, res))
-      }
-    }))
-
-    readFileObjects(allFiles, onFilesAdded)
+    const dropped = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith('.tex'))
+    readFileObjects(dropped, onFilesAdded)
   }, [onFilesAdded])
 
   const onDragOver = (e) => { e.preventDefault(); setDragging(true) }
@@ -98,14 +55,14 @@ export default function FileUpload({ files, mainFile, onFilesAdded, onRemoveFile
         <input
           ref={inputRef}
           type="file"
-          webkitdirectory=""
-          mozdirectory=""
+          multiple
+          accept=".tex"
           className="hidden"
           onChange={onInputChange}
         />
-        <div className="text-4xl mb-2">📁</div>
-        <p className="text-gray-600 font-medium">Drop a folder here or click to browse</p>
-        <p className="text-sm text-gray-400 mt-1">All .tex files inside will be loaded automatically</p>
+        <div className="text-4xl mb-2">📄</div>
+        <p className="text-gray-600 font-medium">Drop .tex files here or click to browse</p>
+        <p className="text-sm text-gray-400 mt-1">Select one or more files · <kbd className="bg-gray-100 px-1 rounded text-xs">⌘</kbd>/<kbd className="bg-gray-100 px-1 rounded text-xs">Ctrl</kbd>+click a loaded file to compare</p>
       </div>
 
       {fileNames.length > 0 && (
@@ -116,10 +73,23 @@ export default function FileUpload({ files, mainFile, onFilesAdded, onRemoveFile
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border cursor-pointer ${
                 name === mainFile
                   ? 'bg-indigo-100 border-indigo-300 text-indigo-800'
-                  : 'bg-gray-100 border-gray-300 text-gray-700 hover:border-indigo-300'
+                  : name === compareFile
+                    ? 'bg-amber-100 border-amber-300 text-amber-800'
+                    : 'bg-gray-100 border-gray-300 text-gray-700 hover:border-indigo-300'
               }`}
-              onClick={(e) => { e.stopPropagation(); onSetMain(name) }}
-              title={name === mainFile ? 'Main file' : 'Click to set as main file'}
+              onClick={(e) => {
+                e.stopPropagation()
+                if ((e.metaKey || e.ctrlKey) && onSetCompare) {
+                  if (name !== mainFile) onSetCompare(name)
+                } else {
+                  onSetMain(name)
+                }
+              }}
+              title={
+                name === mainFile ? 'Main file' :
+                name === compareFile ? '⌘/Ctrl+click to remove from comparison' :
+                'Click to set as main · ⌘/Ctrl+click to compare'
+              }
             >
               <span className="max-w-[180px] truncate">{name}</span>
               <button
