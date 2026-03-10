@@ -259,6 +259,8 @@ export function stripLatex(text) {
     'newcommand', 'renewcommand', 'def',
     'setlength', 'setcounter', 'pagenumbering',
     'hspace', 'vspace', 'rule',
+    // Title-page metadata — drop content even if these appear inside \begin{document}
+    'title', 'author', 'date', 'affil', 'thanks', 'email',
   ]
   for (const cmd of dropArgCmds) {
     result = result.replace(
@@ -392,7 +394,10 @@ export function parseDocument(fileRegistry, mainFileName) {
   fullText = resolveIncludes(fullText, fileRegistry)
 
   // Step 2: extract fixed regions
-  const docBody = extractDocumentBody(fullText)
+  // Strip everything up to and including \maketitle (title block may sit
+  // inside \begin{document} before the first real section / abstract)
+  let docBody = extractDocumentBody(fullText)
+  docBody = docBody.replace(/^[\s\S]*?\\maketitle\b/, '')
   let abstractRaw = extractAbstract(docBody)
   const referencesRaw = extractReferences(docBody)
   const captions = extractCaptions(docBody)

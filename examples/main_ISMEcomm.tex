@@ -1,0 +1,686 @@
+\documentclass[oneside, a4paper, onecolumn, 11pt]{article}
+
+% Page layout
+\usepackage{geometry}
+\geometry{a4paper,left=25mm,right=25mm,top=25mm,bottom=25mm}
+\usepackage{nccmath}
+
+ % Sections
+\usepackage{sectsty}
+\sectionfont{\fontsize{12}{12}\selectfont}
+\subsectionfont{\fontsize{11}{11}\selectfont}
+\usepackage{hyperref}
+
+% Headers
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\renewcommand{\headrulewidth}{0pt} % Remove line at top
+%\lhead{\emph{Shai Pilosof}}
+%\chead{Part B2}
+%\rhead{PlasMiD}
+%\cfoot{\thepage}
+
+% Paragraph and spacing
+\usepackage{setspace}
+    \setlength{\parindent}{0em}
+    \setlength{\parskip}{4pt}
+\usepackage{titlesec}
+    \titlespacing{\section}{0pt}{\parskip}{2pt}
+    \titlespacing{\subsection}{0pt}{\parskip}{2pt}
+    \titlespacing{\subsubsection}{0pt}{\parskip}{2pt}
+    \titlespacing{\paragraph}{0pt}{\parskip}{6pt}
+
+% Fonts
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{enumitem}
+\usepackage[normalem]{ulem}
+
+% Figures and Tables
+\usepackage{placeins}
+\usepackage{tikz}
+\usepackage{multirow}
+\usepackage{booktabs} % For \toprule, \midrule
+\usepackage{graphicx}
+\usepackage[]{caption}
+    \captionsetup{font={sf}, labelfont=bf, labelsep=colon}
+   % \renewcommand{\figurename}{Fig.} 
+    \setlength{\textfloatsep}{10pt} % Control space between figure caption and text
+    \captionsetup[table]{singlelinecheck=false}
+\usepackage{wrapfig}
+\usepackage{floatrow}
+    \floatsetup[table]{capposition=top}
+    \usepackage{pdflscape}
+\usepackage{tabularx}
+\usepackage{array}    % For centering in X columns
+\usepackage{longtable} % For multi-page tables
+    
+% Colors
+\usepackage{xcolor}
+\newcommand\bcl[2]{\textcolor{#1}{{\fontseries{b}\selectfont #2}}}
+\usepackage{hyperref} % makes links
+\hypersetup{
+	colorlinks,
+	citecolor=blue,
+	filecolor=blue,
+	linkcolor=blue,
+	urlcolor=blue
+}
+\definecolor{TitlePurple}{RGB}{102, 102, 255}
+\definecolor{TitleBlue}{RGB}{4, 4, 204}
+
+% Tracking changes
+% only for corrections, as e.g. adding, deleting, commenting, see: https://ctan.org/pkg/changes
+% using local .sty as Overleaf has an older version without hyperlinks feature
+\usepackage[todonotes={textsize=small}, truncate=hyphenate, addmarkup=uwave]{changes}
+\definecolor{ballblue}{rgb}{0.1, 0.67, 0.7}
+\definechangesauthor[name={Shai}, color=AssignColor]{SP}
+\definechangesauthor[name={Geut}, color=TitleBlue]{GG}
+
+\colorlet{Changes@Color}{blue}
+\newcommand{\fnsp}[1]{\footnote{\color{red} #1}}
+\newcommand{\shai}[1]{\textcolor{red}{[Shai: #1]}}
+\newcommand{\matan}[1]{\textcolor{teal}{[Matan: #1]}}
+\newcommand{\assigned}[2]{\textcolor{AssignColor}{[@\textbf{#1}: #2]}}
+\newcommand{\addref}[1]{\textcolor{red}{[ADD REF #1]}}
+
+% Solution to highlight line breaks from https://gitlab.com/ekleinod/changes/-/issues/51 :
+\usepackage{soul}
+\renewcommand{\colorbox}[2]{\colorlet{tmpcolor}{#1}\sethlcolor{tmpcolor}\hl{#2}}
+
+\usepackage{lineno}
+
+% Bibliography
+\usepackage[backend=bibtex,style=nature,natbib=true,url=false,date=year,doi=true,isbn=false,eprint=false]{biblatex}
+\AtEveryBibitem{\clearlist{language}}
+\renewcommand*{\multicitedelim}{\addcomma}
+\addbibresource{paperpile3.bib}
+\newcommand{\mc}[1]{\textcolor{red}{[citation missing#1]}}
+
+
+%%%ORCID
+% Make Orcid icon
+\definecolor{lime}{HTML}{A6CE39}
+\DeclareRobustCommand{\orcidicon}{%
+	\begin{tikzpicture}
+	\draw[lime, fill=lime] (0,0) 
+	circle [radius=0.16] 
+	node[white] {{\fontfamily{qag}\selectfont \tiny ID}};
+	\draw[white, fill=white] (-0.0625,0.095) 
+	circle [radius=0.007];
+	\end{tikzpicture}
+	\hspace{-2mm}
+}
+
+\foreach \x in {A, ..., Z}{%
+	\expandafter\xdef\csname orcid\x\endcsname{\noexpand\href{https://orcid.org/\csname orcidauthor\x\endcsname}{\noexpand\orcidicon}}
+}
+
+
+\usepackage{authblk}
+% Define the ORCID iD command for each author separately.
+\newcommand{\orcidauthorA}{0000-0003-0430-5568} % Shai
+\newcommand{\orcidauthorB}{0000-0002-7792-0812} % Matan
+\newcommand{\orcidauthorC}{0000-0002-2206-1125} % Georgia
+\newcommand{\orcidauthorD}{0000-0001-9330-2873} % Charlie
+\newcommand{\orcidauthorE}{0009-0008-9292-4599} % Itamar
+\newcommand{\orcidauthorF}{0009-0000-3718-8172} % Barry
+\newcommand{\orcidauthorG}{0000-0002-2455-2956} % Voahangy
+\newcommand{\orcidauthorH}{0000-0001-9318-0570} % Steve
+
+
+\usepackage{authblk}
+\title{Host traits and environmental factors shape infection heterogeneity in wild rat–protozoa networks}
+
+\author[1,$\dagger$]{Matan Markfeld\orcidB{}}
+\author[1,$\dagger$]{Itamar Talpaz\orcidE{}}
+\author[1]{Barry Biton\orcidF{}}
+\author[2]{Toky Maheriniaina Randriamoria}
+\author[2,3]{Voahangy Soarimalala\orcidG{}}
+\author[2,4]{Steven M. Goodman\orcidH{}}
+\author[5,6]{Charles L. Nunn\orcidD{}}
+\author[7,*]{Georgia Titcomb\orcidC{}}
+\author[1,8,*]{Shai Pilosof\orcidA{}}
+
+\affil[1]{Department of Life Sciences, Ben-Gurion University of the Negev, Be'er-Sheva, Israel}
+\affil[2]{Association Vahatra, Antananarivo, Madagascar}
+\affil[3]{Institut des Sciences et Techniques de l’Environnement, Université de Fianarantsoa, Fianarantsoa, Madagascar}
+\affil[4]{Field Museum of Natural History, Chicago, IL, USA}
+\affil[5]{Department of Evolutionary Anthropology, Duke University, Durham, NC, USA}
+\affil[6]{Duke Global Health Institute, Durham, NC, USA}
+\affil[7]{Department of Fish, Wildlife, and Conservation Biology, Colorado State University, Fort Collins, CO, USA}
+\affil[8]{The Goldman Sonnenfeldt School  of Sustainability and Climate Change, Ben-Gurion University of the Negev, Be'er Sheva, Israel}
+\affil[$\dagger$]{Equal contribution}
+\affil[*]{Corresponding authors: pilos@bgu.ac.il, georgia.titcomb@colostate.edu}
+
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Short title}
+% 40 characters max
+Infection heterogeneity in rats
+
+\section*{Keywords}
+% 3-10 keywords
+Host-microbe network, Infection heterogeneity, Land-use change, Machine Learning, Stochastic block modeling
+
+
+\clearpage
+
+\linenumbers
+\setstretch{2}
+
+\section*{Abstract}
+% 250 words max
+The occurrence of microbes in animal hosts is highly heterogeneous, shaped by interactions among host traits, environmental context, and microbial diversity. Understanding this heterogeneity is particularly critical for endoparasite infections, where some hosts harbor diverse, high-burden assemblages that elevate disease spread and spillover risk. Yet the mechanisms underlying such heterogeneity remain poorly understood in wild systems, especially at the individual-host level. We addressed this challenge by studying protozoan infections in introduced black rats (\textit{Rattus rattus}) across environmental gradients in Madagascar. Using network-based stochastic block modeling, we identified three infection profiles capturing meaningful variation in protozoan richness and composition, providing a structured framework for understanding heterogeneity. To uncover the predictors of these profiles, we trained machine-learning models incorporating host traits with environmental variables. Our models consistently outperformed no-skill baselines, with host traits contributing $\sim$40\% more to predictions than environmental factors. Body mass and gut microbiome composition emerged as the strongest host predictors, while rat and other non-native species densities were the most influential environmental predictors. These results show that infection heterogeneity arises from the interplay of intrinsic host traits and extrinsic environmental conditions. Our approach illustrates how combining network analysis with predictive modeling can (1) uncover latent heterogeneity in host–microbe associations, (2) identify the relative contribution of the factors driving this heterogeneity, and (3) predict host infection profiles. Our framework advances microbial ecology by linking host traits, microbial communities, and environmental context, while also informing disease ecology at human–animal interfaces where zoonotic pathogens circulate.
+
+
+\clearpage
+
+\section*{Introduction}
+Heterogeneity in microbe occurrence across hosts is a typical characteristic of microbial systems \citep{Zaoli2021-xm,Zhang2014-ab}. Specifically, in microbial host–parasite systems (e.g., protozoans, viruses, and bacterial pathogens), parasite distributions are typically skewed: most hosts harbor few parasites, while a small subset carries heavy burdens \citep{Poulin2007-oi, Tompkins2011-ir, Zhang2014-ab}. This variation, driven by differences in host physiology and environmental context, has major consequences for transmission dynamics, infection persistence, and spillover risk \citep{VanderWaal2016-be, Paull2012-lw, Trauer2019-ab, Gomes2022-ho, Stewart-Merrill2021-xs}. Further complexity arises from co-infections involving multiple parasite species or strains, each with distinct natural history traits and transmission strategies \citep{Sherry2024-ue, Pedersen2007-mv, Venter2022-gu}. Understanding these interacting sources of heterogeneity is essential for predicting and mitigating parasite spread and impact \citep{Johnson2015-iw}. However, the combined influence of host traits, co-infections, and environmental factors on patterns of parasite infection heterogeneity remains poorly understood, particularly at the individual host level.
+
+Bipartite networks, where parasites are linked to the hosts they infect, offer a powerful framework for studying heterogeneity in host–parasite interactions \citep{Runghen2021-hp}. However, studies to date have largely focused on species-level networks to explore ecological and evolutionary processes underlying heterogeneity \citep{Bordes2015-wt, Dallas2021-ua, Lima2012-am,Dallas2019-tx}, with only a limited use of individual-level networks~\citep{Pilosof2015-rw}. Individual-level networks can be used to identify groups of individual hosts with similar parasite associations and, conversely, groups of parasites infecting hosts with similar characteristics. These emergent group structures, which we term \textit{infection profiles}, can provide insights into the ecological and epidemiological roles of hosts and parasites \citep{Allesina2009-ra, Rosvall2018-jg}. For example, distinguishing generalist parasites from rare or highly specialized ones \citep{Poulin2011-wb}, or identifying host groups with distinct parasite assemblages.
+
+Detecting infection profiles involves clustering nodes with similar interaction patterns, which can be done using stochastic block modeling (SBM) \citep{Rosvall2018-jg}. Unlike clustering methods that emphasize dense intra-group links (e.g., modularity), SBMs identify latent group structures based on connection probabilities within and between blocks, allowing detection of nodes that have similar probabilities of connecting to nodes in other groups \citep{Rosvall2018-jg, Allesina2009-ra}. Despite their potential \citep{Leger2015-xn}, SBMs are rarely used in ecological analysis \citep{Baskerville2011-pb, Cobo-Lopez2022-rt, Galai2024-en, Miele2020-ba}. However, such previous studies confirmed their usefulness. For example, in the human gut microbiome, SBMs identified generalist and specialist microbes \citep{Cobo-Lopez2022-rt}. To date, however, SBMs have not, to our knowledge, been applied to host–parasite networks.
+
+Here, we identify infection profiles in individual hosts of the introduced black rat (\textit{Rattus rattus}) and their protozoan parasites in northeastern Madagascar. Protozoa commonly inhabit the mammalian gut, yet few studies have explored their diversity in wild mammals or the factors influencing their community structure \citep{Hunter-Barnett2024-pe}. Detecting infection profiles is particularly important in rural, low-income regions like Madagascar, where introduced rats, living both in the wild and near human settlements, serve as reservoirs for zoonotic pathogens, increasing the risk of spillover to humans \citep{Rahelinirina2010-li,Spencer2020-gm}. For example, in Madagascar \textit{R. rattus} was previously found to have an infection rate of $\sim$20–50\% for protozoa of the zoonotic genera \textit{Trypanosoma}, \textit{Cryptosporidium}, and \textit{Giardia}, which have also been detected in humans on the island \citep{Rasoanoro2019-vo,Spencer2020-gm}.
+
+While infection profiles can reveal structural heterogeneity in host–parasite interactions, they do not explain how it emerges. To gain mechanistic insight to these interactions, our second goal is to identify the intrinsic and extrinsic factors shaping infection profiles by focusing on the two main phases of infection: exposure (the likelihood of encountering a parasite) and susceptibility (the likelihood of infection post-exposure) \citep{Poulin2007-sl, Johnson2014-vf, Sweeny2022-dm}. Intrinsic host traits such as sex, age, body mass, immune function, and co-infections can influence both stages by affecting host behavior, immunity, and survival \citep{Ezenwa2016-em, Cattadori2008-jo, Mabbott2018-wb}. The host microbiome is also a key modulator, shaping susceptibility via its effects on immunity, metabolism, and overall health \citep{Bernardo-Cravo2020-yr, Gould2018-kj}. Extrinsic factors, including land-use change, habitat fragmentation, and environmental reservoirs, alter host movement, contact rates, and exposure risk \citep{Gajewski2024-wb, Cable2017-xe, Begon2002-or, Gottdenker2014-by}. For example, gut protozoa, transmitted via fecal-oral routes, are particularly sensitive to environmental contamination, which varies in different ecological contexts \citep{Sulaiman2025-ss, Dumetre2012-ds}. These extrinsic pressures often interact with intrinsic traits---for instance, through effects on diet, body condition, or stress. However, how such interactions drive infection heterogeneity remains poorly understood, especially in wild or semi-wild mammal populations.
+
+We combined SBM and machine learning tools with detailed field sampling of ecological and biological data to detect infection profiles and assess the key drivers of infection heterogeneity. Our dataset is unusually rich and detailed, containing diverse host traits (e.g., body mass, sex, nematode co-infection, and gut microbiome composition) and environmental factors (e.g., habitat characteristics, disturbance, and community composition). This allows us to test multiple host and environmental drivers simultaneously, an approach rarely possible in most systems. By linking these factors to SBM-identified infection profiles, we disentangle the relative contributions of host traits and environmental conditions to emerging heterogeneity in parasite infection patterns (\textbf{Figure \ref{fig:flow}}).
+
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_flow.pdf}
+	\caption{\textbf{Conceptual scheme of methods.} \textbf{(A)} \textit{Rattus rattus} individuals and their protozoan parasites were sampled along a land-use change gradient to investigate infection heterogeneity. \textbf{(B)} Host traits (e.g., mass, sex, nematode co-infection status, and microbiome composition) and environmental features (e.g., habitat attributes, population density) were measured for each host. \textbf{(C)} We used Stochastic Block Modeling (SBM) to identify host and parasite infection profiles based on interaction patterns in the host-parasite network. Colors indicate SBM-assigned group membership of protozoa OTUs and rat hosts. \textbf{(D)} We trained an XGBoost model on the host and environmental features to quantify their relative importance in predicting infection profiles. \textbf{(E)} (i) We used SHAP (SHapley Additive exPlanations) values to estimate the mean absolute contribution of each host-trait (purple circles) and environmental (green circles) feature by measuring changes in model predictions upon feature removal \citep{Lundberg2017-dr}. (ii) The relationship between features (e.g., host mass) and SHAP values for each infection profile was assessed. Positive SHAP values indicate a feature that supports classification into an infection profile, while negative values indicate the opposite.}
+\label{fig:flow}
+\end{figure}
+\FloatBarrier
+
+\vspace{6 mm}
+
+\section*{Materials and Methods}
+
+\subsection*{Study site and sampling}
+Our study focused on the black rat (\textit{Rattus rattus}), a species introduced to Madagascar probably during the 10\textsuperscript{th}-century and the most abundant small mammal in non-forested, rural areas on the island \cite{Brouat2014-xd,Scobie2024-rc,Randriamoria2014-gj}. As a large generalist omnivore with a highly adaptable diet \cite{Dammhahn2017-rz}, \textit{R. rattus} is a primary agricultural pest, a major disruptor of native ecological communities, and a potential vector for zoonotic diseases in the area \cite{Randriamoria2014-gj, Rahelinirina2010-li}.
+
+Rats were collected in the vicinity of three villages (Mandena, Sarahandrano, Andatsakala) in the SAVA Region of northeastern Madagascar, in the area surrounding Marojejy National Park (\textbf{SI note 1}). The park consists of natural moist evergreen forests spanning a wide elevation range, from lowland areas to mountain peaks exceeding 2000 m. At each of the three villages, small mammals were sampled across seven habitat types (sites) representing a degradation gradient: (1) semi-intact natural forest inside the national park, (2) secondary forest, (3) \textit{savoka} (brushy regrowth), (4) agroforest (vanilla plantation), (5) mixed agriculture (sugarcane/coffee plantation), (6) flooded rice fields, and (7) the village itself. Sites in each village setting were located approximately 500 m apart. At each site, a grid of 121 live traps (arranged in an 11$\times$11 configuration with 10 m spacing) was deployed, supplemented by two pitfall trap lines outside the grid, each containing 11 buckets. During the study period, each site was sampled for six consecutive nights during three different seasons. Sampling was conducted at Mandena between October 2019 and September 2020, at Sarahandrano between November 2020 and September 2021, and at Andatsakala between October 2021 and August 2022.
+
+\subsection*{Protozoa DNA extraction and lab work}
+We used DNA metabarcoding to detect a range of protozoa in rats, identify nematode infections, and characterize the rat microbiome. Approximately 1g of feces was preserved in either nucleic acid preservation (NAP) buffer \citep{Camacho-Sanchez2013-my} or Zymo DNA/RNA Shield (Zymo Research, Irvine, California). Two different storage solutions were used due to complications with lab supplies during the COVID-19 pandemic. Mean sequencing read abundance did not differ between the two sample types. DNA was extracted from fecal samples using Zymo MiniPrep Fecal kits (Zymo Research, Irvine, California) according to manufacturer directions. 
+
+We performed PCR with the G4 primer set \citep{Gogarten2020-vf,Krogsgaard2018-lw} to amplify 18S ribosomal DNA from a wide range of eukaryotes in the rat fecal DNA extracts. Forward and reverse primers contained 8-nucleotide barcodes with a Hamming distance of at least 4. PCR reactions were carried out in 15$\mu$L volumes consisting of: 3 $\mu$L of each forward and reverse primer (2 $\mu$M stock concentration); 7 $\mu$L from a Mastermix comprised of 0.7 $\mu$L of Amplitaq Gold polymerase, 150 $\mu$L MgCl2, 150 $\mu$L Amplitaq Gold buffer, 12 $\mu$L BSA, 6 $\mu$L DMSO, and 344 $\mu$L water; and up to 2 $\mu$L template DNA (1–100 ng total). Cycling conditions were: 10-minute hot-start activation, 35x cycles of 15 s at 95°C, 30 s at 57°C, 40 s at 72°C, and a final 5-min extension at 72°C. DNA concentrations were then measured, pooled, normalized, and purified using MinElute columns prior to multiplexing with additional libraries. The final library for each village was sequenced three times on an Illumina MiSeq (v3 2 × 300 bp, 25 M reads) at the UC Davis Genome Center. Sequences were demultiplexed using cutadapt (v.3.4) with zero error tolerance \citep{Martin2011-yj}. We used the \textit{dada2} bioinformatics pipeline \citep{Callahan2016-wj} to filter and trim amplicons (minimum length = 100, 15\% PhiX removed), remove errors, dereplicate, infer amplicon sequence variants (ASVs) using the pseudo-pooling method, merge pairs, remove chimeras, and combine the three ASV read tables from the different villages into one table.
+
+\subsection*{Bioinformatics and protozoa OTU processing}
+We calculated the relative read abundance of each ASV and excluded reads that accounted for less than 1\% of a sample's relative read abundance to avoid potential sequencing errors or tag jumps. We excluded any sample with fewer than 500 total reads due to potential amplification or sequencing failure (n=38). Due to less certainty in protozoal identifications, we then used a consensus approach to assign taxonomy to ASVs: we used both the 'assignTaxonomy' function in \textit{dada2} (minimum bootstraps = 50) and the 'IdTaxa' function in the \textit{DECIPHER} package in R \citep{Murali2018-hm} to generate two identifications for each ASV using the SILVA non-redundant database clustered at 99\% similarity (v.132). For any ASV with a mismatching identification, we queried the sequence in the NCBI GenBank database to assign a final ‘consensus’ ID.
+
+Next, we clustered phylogenetically similar ASVs into OTUs at 97\% similarity using the `Clusterized' function from the DECIPHER package. Taxonomy was assigned to each OTU based on its most common ASV. Because the G4 primer set amplifies both parasitic and non-parasitic eukaryotic DNA, we then manually filtered all OTUs to those that are known or suspected parasites of mammals. Consequently, our protozoan community represents OTUs with small genetic variations that may influence their pathogenic traits. Host-parasite network studies exclude uninfected individuals because the lack of a link could be a false negative. Our primer set amplifies both parasitic and non-parasitic eukaryotic DNA, allowing us to designate rats with only non-parasitic protozoa as ``uninfected''. We still acknowledge that, as in any study, very low-abundance parasite infections might escape detection. In total, our dataset includes 841 individual rat hosts and 41 protozoan OTUs spanning 10 genera and 4 phyla (\textbf{Figure \ref{figure_SI_otu_distribution}}). 
+
+\subsection*{Network construction and detection of infection profiles}
+We constructed a bipartite network representing individual rat hosts and protozoa OTUs, where an edge is present ($1$) if an OTU infects a host and absent ($0$) otherwise (\textbf{Figure \ref{fig:flow}C}). Then, we identified infection profiles using SBM \citep{Leger2016-ab}. In the bipartite version of the SBM, hosts are assigned to $Q^{(1)}$ groups and protozoa parasites to $Q^{(2)}$ groups. The interactions between these groups are governed by a block connectivity matrix $\Theta$, which encodes the probability of infection between each pair of host and parasite blocks \citep{Leger2016-ab}. Consequently, the probability that a link exists between a host $i$ and a parasite $j$, which belong to groups $c_x$ and $c_y$ respectively, is $P_{ij} = \Theta{c_x c_y}$. This structure implies that nodes within the same block are ``stochastically equivalent'' and thus have similar probabilities of being infected by parasites from a given parasite block. Because SBM is based on links, we predefined uninfected hosts as a separate group and conducted the SBM analysis exclusively on the infected hosts.
+
+We implemented SBM using a commonly used Variational Expectation-Maximization (VEM) algorithm, which iteratively estimates latent memberships and model parameters \citep{Leger2016-ab}. The algorithm partitions the network into groups and calculates the likelihood of such clustering, considering the membership of nodes in groups. The algorithm consists of two main steps: (1) updating the posterior probabilities of host and parasite assignments to latent blocks and (2) optimizing model parameters—including the block connectivity probabilities $\Theta$—to maximize the likelihood of the observed data. To determine the optimal number of host and parasite blocks, we used the Integrated Completed Likelihood (ICL) criterion, which balances model fit and complexity by penalizing model size. This approach ensures robust and interpretable clustering \citep{Leger2016-ab}.
+
+\subsection*{Feature collection and processing}
+To investigate the determinants of parasite infection patterns, we measured a set of host traits and environmental variables for each host (\textbf{Figure \ref{fig:flow}B}, \textbf{Table \ref{tab:table 1}}, and see \textbf{SI note 2} for detailed explanations). These variables might influence infection patterns by affecting both host exposure and susceptibility to infection. We assessed six host variables: (1) body mass, (2) body condition, calculated by Body Condition Index (BCI), (3) sex, (4) age, categorized as sub-adult and adult, (5) nematode co-infection, measured as presence/absence of nematodes, and (6) gut microbiome composition, measured as the relative abundance of four microbial families that were significantly correlated with the first two principal coordinates in a PCoA (\textbf{Figure \ref{figure_SI_microbiome}}). Host mass, body condition, sex, and age can influence behavior (e.g., home range and social interactions) as well as physiological traits \citep{Grear2009-ch,Cornell2008-cx,Sanchez2018-tf}. Co-infection with macroparasites can further influence infection with microparasites. Specifically, nematodes are known to modulate the host immune system, potentially altering susceptibility to co-infection by other parasites \citep{Mabbott2018-wb,Rodgers2024-hl}. The gut microbiome plays a critical role in host metabolism and immune function, serving as an indicator of overall health \citep{Berg2020-az, Gould2018-kj}. Variation in microbial composition and relative abundance has previously been linked to several diseases and may reflect either an increased vulnerability of the host or a response to the disease itself \citep{Levy2017-ec,Rosshart2017-pu}.
+
+We measured three environmental variables: (1) habitat structure (obtained via a vegetation PCA that distinguishes between tree-dominated and herbaceous-dominated sites; \textbf{Figure \ref{figure_SI_vegetation}}), (2) distance to the village center (a proxy for habitat disturbance), and (3) small mammal community composition (population densities of rats, native species, and other non-native species, including shrews and house mice). Population densities were calculated as the average number of individuals captured per sampling trap for every site and season. Vegetation type and proximity to the village are covariates that can influence the composition and survival of parasites in the environment, thus altering exposure risk to rats \citep{Gottdenker2014-by,Patz2000-cg}. Additionally, small mammal population density can impact infection patterns, as higher contact rates in denser populations may facilitate parasite transmission within and between host species \citep{Begon2002-or,Gajewski2024-wb}. Thus, differences in species densities across sites may lead to distinct parasite transmission patterns among rat populations. The correlation between pairs of features ranged between -0.71 and 0.67 with average absolute value of 0.13 (\textbf{Figure \ref{figure_SI_correlations}}).
+
+\subsection*{Training a classification model to predict infection profiles}
+Using both host traits and environmental variables as suites of features, we trained an XGBoost (eXtreme Gradient Boosting) multi-classification model to predict host infection profile membership (SBM-identified groups)(\textbf{Figure \ref{fig:flow}D}). XGBoost is a distributed decision tree machine learning algorithm based on gradient boosting that efficiently handles structured data and captures complex patterns through ensemble learning \citep{Chen2016-ev}. Machine learning methods, like XGBoost, effectively capture complex non-linear relationships between variables, which traditional linear models cannot represent \citep{Lundberg2020-ro,Manley2023-qx}.
+
+To ensure that all data points were tested at least once while mitigating overfitting and improving the robustness of the analysis, we implemented a stratified nested cross-validation (CV) approach, maintaining class distributions across splits. The outer loop used a 3-fold cross-validation, where the dataset was split into three equal parts, and each subset was used once as a test set while the remaining two served as the training set. Within the inner loop, we conducted a 5-fold CV for hyperparameter tuning. Hence, within each training set, the data were further divided into five subsets, with four used for training and one for validation. This process was repeated for each fold, optimizing hyperparameters across different partitions of the data. To address data imbalance (uneven sizes of the host infection profiles) and prevent the model from being biased toward the majority profile, we applied host profile weights inversely proportional to profile frequencies, assigning higher weights to minority profile samples during model training.
+
+For hyperparameter tuning, we performed a grid search over key parameters, including maximum tree depth, learning rate (eta), column and row subsampling rates, L1/L2 regularization parameters (alpha, lambda), and minimum child weight (\textbf{Table \ref{tab:table 2}}). The selected parameter search space aimed to minimize model complexity, thereby reducing the probability of overfitting. For each configuration, we trained the model using 300 boosting rounds, with early stopping based on validation loss to prevent overfitting. In each outer loop iteration, the best-performing hyperparameters (selected based on multi-class log-loss) were used to train a model, which was then evaluated on the outer test dataset. This process produced three models, corresponding to the three outer loops, each predicting a different fold of the dataset. The output of each model was a probability distribution over possible infection profiles, constrained to sum to one. The predicted profile was determined as the one with the highest probability.
+
+To evaluate performance, we used a range of metrics designed to capture different aspects of predictive ability \citep{Poisot2023-jo, Grandini2020-nl} (\textbf{SI note 3}). Since we had three infection profiles (see \textit{Results}), we used metrics for multi-class classification. The evaluation was based on a $3\times3$ confusion matrix, which recorded the number of true positives and false positives for each infection profile. We used common evaluation metrics such as accuracy, weighted precision, weighted recall, weighted F1-score, weighted balanced accuracy, and Matthews correlation coefficient (MCC). To benchmark model performance against chance, we analytically derived expected metric values for a random classifier using proportional guessing based on profile prevalence. In addition, for each infection profile, we assessed one-vs-all performance across decision thresholds using Area Under the Receiver Operating Characteristic Curve (AUC-ROC) and Area Under the Precision-Recall Curve (PR-AUC). This allowed us to evaluate the model’s ability to distinguish among profiles and capture precision–recall tradeoffs, especially in the context of class imbalance. See \textbf{SI note 3} for detailed explanations.
+
+\subsection*{Feature importance analysis}
+To interpret the contribution of each host or environmental variable to the classification task, we employed both XGBoost’s gain metric and SHapley Additive exPlanations (SHAP) values (\textbf{Figure \ref{fig:flow}E}). SHAP explains machine learning model predictions by quantifying the contribution of each input feature. Specifically, SHAP values measure how much each feature increases or decreases the model’s prediction compared to the average prediction \citep{Lundberg2017-dr}. To determine these values, SHAP evaluates the model’s output across different subsets of features and calculates the difference in predictions when a feature is included versus when it is omitted, then averaging these differences across all possible feature combinations. This ensures that the contribution of each feature is measured while accounting for interactions with other features. The magnitude of a SHAP value represents the strength of a feature’s influence on the prediction, with larger absolute values indicating a greater impact. 
+
+We assessed global feature importance by averaging absolute SHAP values across all hosts in the test subset of the three-fold models (totaling 841 samples), and then summing these mean values across all infection profiles. Additionally, we aggregated feature importance by category (host traits versus environmental) by summing SHAP values within each category, enabling a comparative assessment of their relative influence on classification. We then used the SHAP values themselves to create dependence plots capturing how each feature’s effect varied across its observed range (e.g., the range of host masses), illustrating potential relationships with the profiles. Positive SHAP values indicate that a feature increases the prediction compared to the baseline model output, ``pushing'' the model towards a specific infection profile. In contrast, negative SHAP values decrease the prediction compared to the baseline, moving the model away from predicting that infection profile.
+
+\subsection*{Code and data}
+All analyses were conducted in R (v4.2.1) \citep{R-Core-Team2024-fg}. We used the R package \textit{blockmodels} (v1.1.5) \citep{Leger2016-ab} for the SBM analysis, the package \textit{XGBoost} \citep{Chen2016-ev} for model training, with the package \textit{caret} \citep{Kuhn2008-kd} for cross-validation and performance evaluation. ROC and PR curves were created using the \textit{pROC} \citep{Robin2011-vr} and \textit{PRROC} \citep{Grau2015-sw} packages. SHAP values were computed with the package \textit{shapviz} \citep{Mayer2025-vk}. 
+
+\section*{Results}
+
+\subsection*{Stochastic block modeling reveals structured host and protozoan profiles}
+The rat–protozoa bipartite network included 841 host nodes---271 uninfected (singleton nodes with no links) and 570 infected---and 41 protozoan OTU nodes. The network contained 1,557 links, with a connectance of 0.045 (i.e., 4.5\% of all possible links were realized).
+
+We identified two host groups based on the SBM analysis. Together with the uninfected group, this resulted in three \textit{host infection profiles}. We also identified seven \textit{protozoan infection profiles} (\textbf{Figure \ref{fig:infection_profiles}A}, \textbf{Figure \ref{figure_SI_network.pdf}}). The host infection profiles varied in size, with 271 individuals classified into the first profile, 205 into the second, and 365 into the third. Protozoan infection profile size ranged from a single OTU to 21 OTUs. We also found variation in host node degree. Specifically, rats from the first profile were infected by 0 protozoa OTUs (the uninfected profile), rats from the second profile were infected by 1-7 (mean = 1.61) OTUs, and rats from the third profile were infected by 1-10 (mean = 3.36) OTUs (\textbf{Figure \ref{fig:infection_profiles}B}). The protozoan infection profiles also varied in degree, as OTUs from profiles 1, 5, and 6 (all are of the genera \textit{Tritrichomonas} or \textit{Hypotrichomonas}) were more prevalent, infecting 15–36\% of hosts, whereas OTUs from profiles 2–4 and 7 were rarer, infecting only 0.3–8\% of hosts (\textbf{Figure \ref{fig:infection_profiles}C}, \textbf{Figure \ref{figure_SI_otu_distribution}}). 
+
+The host infection profiles differed not only in node degree but also in connectivity patterns, as captured by the block connectivity matrix $\Theta$ (\textbf{Figure \ref{fig:infection_profiles}A}). Hosts in profile 1 were uninfected and showed no associations with any protozoan OTUs. In contrast, host infection profile 2 was characterized by infection with the prevalent \textit{Hypotrichomonas} OTU. This was indicated by strong connectivity to protozoan profile 5, along with sporadic infections with diverse, low-prevalence OTUs (protozoan profiles 4 and 7). Host infection profile 3 exhibited higher overall infection levels, with particularly strong associations to the highly prevalent \textit{Tritrichomonas} OTUs (protozoan profiles 1, 2, and 6). 
+
+Heterogeneous connectivity patterns were also found for the protozoa profiles, as some maintained a consistent low infection rate (e.g., profile 7), while others exhibited strong preferences to particular host infection profiles (e.g., parasite profiles 1, 5, and 6). Several protozoan profiles consisted of specific taxa (profiles 1-3, 5, 6, and 8 were mostly \textit{Tritrichomonas} and \textit{Hypotrichomonas}), while profiles 4 and 7 contained diverse taxa. 
+
+Overall, these distinct connectivity patterns demonstrate that the SBM effectively captured infection profiles, revealing latent groups in host-parasite interactions.
+
+
+\begin{figure}[h!t]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/figure_infection_profiles.pdf}
+    \caption{\textbf{Infection profiles of \textit{Rattus rattus} individual hosts and protozoan OTUs.} \textbf{(A)} The block connectivity matrix $\Theta$ resulting from the stochastic block model (SBM) analysis of the rat-protozoa network. Rows and columns represent protozoa and host groups, respectively ($n$ indicates the number of OTUs or hosts in each group). Cell color reflects the SBM-predicted link probability between a host and an OTU that belong to certain groups. The link probability is denoted in each cell and the total number of observed links between groups is shown in parentheses. Pie charts depict the proportion of OTUs from each protozoan taxa (at the species/genus level) within each protozoan infection profile. \textbf{(B)} Host degree distribution (protozoan OTU richness with which a host is infected). \textbf{(C)} Protozoa OTU degree distribution (number of host individuals an OTU infects). Colors indicate protozoa and host infection profiles (SBM groups).}
+    \label{fig:infection_profiles}
+\end{figure}
+\FloatBarrier
+
+\vspace{6 mm}
+
+\subsection*{Host traits outweigh environmental features in predicting host infection profiles}
+
+Our XGBoost model consistently outperformed a no-skill classifier in predicting host profiles (weighted precision = 0.53, weighted recall = 0.54, weighted F1-score = 0.53, weighted balanced accuracy = 0.64, and Matthews correlation coefficient (MCC) = 0.28; \textbf{SI notes 3 and 4}). To evaluate the model’s ability to distinguish among profiles, we further assessed one-vs-all performance across decision thresholds. The Area Under the Receiver Operating Characteristic Curve (AUC-ROC) exceeded the random expectation of 0.5 for all profiles (AUC = 0.726, 0.606, 0.738, for profiles 1, 2, and 3, respectively). Similarly, the Precision-Recall Curve was above the no-skill baselines for the three host profiles (AUC = 0.548 [no-skill of 0.322] for profile 1; AUC = 0.331 [0.244] for profile 2; and AUC = 0.656 [0.434] for profile 3). Therefore, we can predict infection profiles based on the features we selected.
+
+However, not all features contribute equally to prediction. To identify the features driving model predictions of host infection profiles, we used SHapley Additive exPlanations (SHAP) analysis, which quantifies each feature’s contribution to classification outcomes \citep{Lundberg2017-dr}. To assess the relative importance of host traits versus environmental factors, we summed absolute SHAP values within each category. While both categories of features influenced model predictions, host traits' features contributed 40\% more than environmental features (1.24 compared to 0.88 mean absolute SHAP) (\textbf{Figure \ref{fig:abs_shap}A}). This trend was consistent across all host infection profiles, with host features consistently showing higher absolute SHAP values. However, for host profile 3, the environmental features contributed almost as much as the host traits. The pattern held even when we considered only the top six host features to match the number of environmental features, with host features still exhibiting higher mean absolute SHAP values (1.16 vs. 0.88). 
+
+The most influential host features included host body mass and the relative abundance of the gut microbial families \textit{Prevotellaceae} and \textit{Muribaculaceae} (\textbf{Figure \ref{fig:abs_shap}B}). Body mass is known to affect infection risk, and it is often linked to body condition, age, and sex \citep{Sanchez2018-tf, Durkin2015-eu,Santin2023-yk,Izhar2015-ir,Grear2009-ch}. However, these later features ranked low in their importance. Salient environmental features included rat and other non-native species densities at a site, together with the site's vegetation structure (PC1) (\textbf{Figure \ref{fig:abs_shap}B}). Notably, the relative importance of all features varied among host infection profiles, with some playing a crucial role in predicting certain profiles while being less relevant for others. For example, rat density was an important feature in predicting host infection profiles 1 and 3, whereas its contribution to the prediction of profile 2 was lower (\textbf{Figure \ref{fig:abs_shap}B}).
+
+\begin{figure}[h!t]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/figure_abs_shap.pdf}
+    \caption{\textbf{Importance of host traits and environmental variables in predicting host infection profiles.} \textbf{(A)} Mean absolute SHAP values for host and environmental features across all host infection profiles, highlighting their relative contributions. \textbf{(B)} Feature importance, measured as the mean absolute SHAP values across hosts for all infection profiles. Features are ranked from most important (top) to least important (bottom). In both panels, bar colors depict host infection profiles. Circles indicate host (purple) and environmental (green) features, with the letter inside each circle depicting the corresponding sub-category of the feature per the legend at the bottom-left (\textbf{Table \ref{tab:table 1}}).
+    }
+    \label{fig:abs_shap}
+\end{figure}
+\FloatBarrier
+
+\vspace{6 mm}
+
+\subsection*{Host traits and ecological gradients structure host infection profiles}
+To further investigate how the most important features influence the prediction of specific host infection profiles, we used SHAP dependency plots, which visualize the relationship between feature values and SHAP values. For most features, we observed clear trends between feature values and model predictions of infection profiles (\textbf{Figure \ref{fig:shap_trends}}, \textbf{Figure \ref{figure_SI_shap_all}}). For example, rats with a body mass below 100 g were consistently classified into infection profile 1, which is associated with no infection, whereas larger rats were more often assigned to host profile 3, characterized by higher infection richness. Particularly interesting features were the relative abundance of the bacterial families \textit{Prevotellaceae} and \textit{Muribaculaceae}. A high relative abundance of \textit{Prevotellaceae} in a host was influential in distinguishing host profile 3 (high infection). In contrast, a high relative abundance of \textit{Muribaculaceae} was associated with host profile 2 (low infection) (\textbf{Figure \ref{fig:shap_trends}}). These bacterial families have been shown to play key roles in digestion, immune regulation, and gut health \citep{Gellman2023-zm,Betancur-Murillo2022-cc,Zhu2024-ff}. 
+
+Among the environmental features, higher non-native species and rat densities were associated with a marked shift in predicted host infection profiles from 1 (no infection) to 3 (higher infection richness). This pattern was also evident along the vegetation gradient: negative values of vegetation PC1---indicative of less disturbed sites---were more associated with host profiles 1 and 2, and less so with profile 3. However, some features showed weak or no clear trends with specific infection profiles (e.g., distance from the village center; \textbf{Figure \ref{figure_SI_shap_all}}). 
+
+
+\begin{figure}[h!t]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/figure_shap_trends.pdf}
+    \caption{\textbf{Key host traits and environmental factors predict infection profiles with distinct trends in SHAP values.} SHAP dependency plots show individual hosts' SHAP values (y-axis) as a function of feature values (x-axis). For clarity, we visualized only the LOESS-derived trend line and its associated confidence interval for the 841 host samples, rather than displaying all individual host data points. Line colors indicate host infection profiles. The dashed gray line marks a SHAP value of zero (i.e., no predictive value). LOESS line above and below 0 indicates that the classification of a profile is more or less likely, respectively. The top and bottom rows present the three most important host and environmental features, respectively ([B] = Biological; [M] = Microbiome; [C] = Community density; [V] = Vegetation).
+    }
+    \label{fig:shap_trends}
+\end{figure}
+\FloatBarrier
+
+\vspace{6 mm}
+
+\section*{Discussion}
+
+Understanding what drives infection heterogeneity is key to predicting parasite transmission and spillover risk. However, identifying patterns in infection heterogeneity and its underlying factors remains challenging. By combining stochastic block modeling (SBM) and machine learning with detailed field data on the introduced \textit{Rattus rattus} in Madagascar, we identified three distinct host infection profiles---ranging from low infection and weak protozoan associations to high infection. Host traits were $\sim$40\% more important than environmental factors in shaping these profiles, with body mass, gut microbiome composition, and small mammal community density being the strongest predictors.
+
+Our study offers insights into the processes underlying microbial host–parasite interactions by identifying infection profiles that capture meso-scale network structure. Unlike pairwise analyses, infection profile detection accounts for co-infection patterns and variation in parasite generalism, which are ubiquitous in nature \citep{Hoarau2020-uc, Park2018-uf}. Hosts in profiles 2 and 3 differed not only in parasite richness but also in composition, with a shift from highly prevalent Tritrichomonas OTUs in profile 3 to less prevalent Hypotrichomonas and other rare taxa in profile 2. These profiles also offer predictive insights into host heterogeneity, revealing epidemiologically relevant differences. For example, profile 3 hosts were associated with generalist parasites and may act as superspreaders, whereas profile 2 hosts had lower infection rates but harbored greater parasite diversity. These contrasting patterns suggest distinct roles in infection dynamics and spillover risk. Supporting this, profile 3 was more strongly linked to Tritrichomonas, while profile 2 was associated with Blastocystis and Eimeria. All three protozoan taxa were detected in local human populations (unpublished data; \citep{Barrett2024-nc}), suggesting that the relevance of each profile to spillover events may differ.
+
+Body mass was the dominant predictor of infection heterogeneity. Body mass is a well-established correlate of infection risk, often serving as a proxy for body condition, which can influence immune function and physiological resilience to parasites \citep{Sanchez2018-tf}. It also correlates with age and sex, since younger and female rats tend to be smaller. Age influences infection patterns because younger individuals have had less time to accumulate parasites but may be more susceptible to initial infections \citep{Santin2023-yk}, whereas male behavioral traits---greater movement, territoriality, and aggression---can increase exposure and infection rates \citep{Grear2009-ch}. Therefore, body mass likely integrates multiple underlying physiological processes (e.g., immune maturity, energy reserves) that drive parasite susceptibility. None of those traits emerged as top predictors on their own---possibly because their signal was outweighed by mass in the model. Future work that disentangles how age, sex, and body condition independently influence parasitism will help clarify which specific processes underlie the emergence of infection profiles.
+
+Gut microbiome composition was also an important feature. While the microbiome is closely tied to host health, the direction of causality remains unclear: dysbiosis (an imbalance in microbial communities) may increase susceptibility, or alternatively, parasite infection itself can disrupt the microbiome and trigger dysbiosis \citep{Levy2017-ec, Brussow2020-st}. Moreover, microbiome composition shifts along environmental gradients such as land-use change, potentially influencing host–parasite dynamics \citep{Markfeld2025-ny, Bernardo-Cravo2020-yr}. Therefore, regardless of causality, our findings highlight the importance of jointly considering microbiome and environmental factors, and suggest that the microbiome may serve as a useful indicator of infection heterogeneity in wild populations. Notably, unlike the microbiome, nematode co-infection did not emerge as an important predictor, although it is known to modulate host immunity and alter susceptibility to other parasites \citep{Keegan2024-ts,Ezenwa2016-dq}. More detailed research into how nematodes and protozoa jointly shape infection profiles is needed, particularly because their transmission pathways are similar.
+
+The most influential environmental features were small mammal population densities. These community-level factors shaped infection profiles, particularly in the shift from no infection (profile 1) in natural habitats to higher infection rates (profile 3) in disturbed environments (e.g., villages, rice fields, agroforests). Higher densities of rats and other non-native species were associated with these sites (\textbf{Figure \ref{figure_SI_sm}}), suggesting that increased host abundance and altered community composition facilitate parasite transmission. One mechanism is density dependence: denser populations lead to more frequent contact events and greater environmental contamination \citep{Gajewski2024-wb}, especially for gut protozoa relying on fecal-oral transmission \citep{Sulaiman2025-ss}. While vegetation and distance from villages were also included as proxies for land-use change, they were less predictive than small mammal density (\textbf{Figure \ref{figure_SI_shap_all}}). This suggests that land-use change influences infection primarily through its effects on host abundance and community composition \citep{Budria2014-xu}.
+
+Our study advances understanding of how host traits and environmental variation interact to shape infection heterogeneity. Nevertheless, several limitations highlight directions for future research. First, we were unable to disentangle the relative contribution of host susceptibility from exposure \citep{Sweeny2022-dm}. Many predictors, such as gut microbiome composition, likely reflect both processes: the microbiome can influence immune function and infection risk \citep{Rosshart2017-pu,Leung2018-qm}, but could also reflect shifts with diet and environment, serving as a proxy for exposure \citep{Markfeld2025-ny,Fackelmann2021-zf}. Disentangling these processes will require experimental or longitudinal designs. Second, our model showed limited predictive performance, particularly for the low-infection host profile 2. This is likely in part due to class imbalance, as profile 2 comprised the smallest proportion of hosts (24.3\%). Additionally, our model does not explicitly capture stochasticity in infection dynamics \citep{May2023-te}. However, among the deterministic factors considered, we were able to distinguish those with greater predictive importance. Improving model performance and biological interpretability may require increased sampling effort and the inclusion of higher-resolution data---such as parasite load, behavioral metrics, and immunological markers.
+
+In summary, our approach enables the detection of structured host–microbe associations and a mechanistic understanding of their emergence, bridging network analysis with predictive modeling in a way rarely applied in microbial ecology. Although broadly applicable to diverse microbial communities, our study system further highlights the interface between microbial and disease ecology. By integrating network-based approaches with machine learning and comprehensive ecological and biological data, we quantified the relative contributions of intrinsic host traits and extrinsic factors in shaping protozoan infection patterns of rats along a land-use gradient. This framework moves beyond traditional analyses by capturing complex co-infection dynamics and revealing the functional roles of different host groups in pathogen transmission. As anthropogenic disturbance continues to reshape host and microbial communities, such integrative approaches will be essential for advancing predictive microbial ecology, improving our understanding of community assembly processes, and informing strategies for infection risk assessment.
+
+\vspace{6 mm}
+\section*{Acknowledgments}
+We sincerely thank all members of our Madagascar Health team for their invaluable support and thoughtful feedback. We are especially grateful to the Mention Zoologie et Biodiversité Animale, Université d'Antananarivo, Madagascar National Parks, and the Direction des Aires Protégées, des Ressources Naturelles Renouvelables et des Ecosystèmes for administrative aid and issuing research permits. Jacquis Tahinarivony for the botanical work at the different study sites. Our appreciation also extends to the Duke Lemur Center–SAVA Conservation office for their logistical support. We are deeply thankful to the local communities and authorities who welcomed us, as well as to the numerous field assistants from the villages where our research took place.
+
+\section*{Funding}
+This work was supported by the Israel Science Foundation (grant 1281/20 to SP), the U.S. National Science Foundation (grant DEB 2308460 to GT and CLN), the U.S.-Israel Binational Science Foundation (grant 2022721 to SP), the NIH-NSF-NIFA Ecology and Evolution of Infectious Diseases program (award R01-TW011493 to CLN), a Duke University Provost’s Collaboratory Award to CLN, and the Human Frontier Science Program (grant RGY0064/2022 to SP).
+
+\section*{Author contributions}
+Conceptualization: MM, IT, SP; Data sampling: VS, SMG, TMR; Sample creation and molecular and bioinformatic analysis: GT; Formal analysis: MM, IT; Funding acquisition: CLN, SP, GT; Supervision: SP; Writing – original draft: MM, IT, SP, GT; Writing – review and editing: MM, IT, SP, GT, CLN, BB, SMG, VS, TMR.
+
+\section*{Competing interests}
+The authors declare that they have no competing interests.
+
+\section*{Data and materials availability}
+All data and code needed to evaluate the conclusions in the paper are present on the GitHub repository \url{https://github.com/MadagascarEEID/rat_protozoa_infection_profiles}.
+
+%\section*{References}
+ \printbibliography
+
+
+
+
+
+
+\clearpage
+\appendix
+\setcounter{subsection}{0}
+\renewcommand{\thesection}{S\arabic{section}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\section*{Supplementary information}
+
+\begin{landscape}
+\begin{table}[h]
+\centering
+\caption{Summary of features used in the XGBoost model. See \textbf{SI note 2} for detailed explanations on sampling and measurement methods.}
+\label{tab:table 1}
+\begin{tabular}{p{2.5cm} p{3.8cm} p{3.8cm} p{2cm} p{1.8cm} p{8cm} p{2cm}}
+\toprule
+\textbf{Category} & \textbf{Sub-category} & \textbf{Feature} & \textbf{Type} & \textbf{Scale} & \textbf{Explanation} & \textbf{References} \\
+\midrule
+\multirow{9}{*}{Host traits} & \multirow{4}{*}{Biological} & Body mass & Continuous & Individual & Rat body mass [gram] & \citep{Sanchez2018-tf,Durkin2015-eu} \\
+ & & Body condition & Continuous & Individual & Body Condition Index value by age and sex & \\
+ & & Sex & Binary & Individual & Male / female & \citep{Grear2009-ch,Klein2004-sz} \\
+ & & Age & Binary & Individual & Sub-adult / adult & \citep{Cornell2008-cx,Santin2023-yk,Preston2025-cn} \\
+\cmidrule{2-7}
+ & Nematode co-infection & Nematode co-infection & Binary & Individual & Infection by any nematode species [0/1] & \citep{Mabbott2018-wb,Rodgers2024-hl,Ezenwa2016-dq}  \\
+\cmidrule{2-7}
+ & \multirow{4}{*}{Microbiome} & \textit{Lachnospiraceae} & Continuous & Individual & Family relative abundance [0-1] &  \\
+ & & \textit{Lactobacillaceae} & Continuous & Individual & Family relative abundance [0-1] & \citep{Rosshart2017-pu,Levy2017-ec,Bernardo-Cravo2020-yr,Chabe2017-lh} \\
+ & & \textit{Muribaculaceae} & Continuous & Individual & Family relative abundance [0-1] & \\
+ & & \textit{Prevotellaceae} & Continuous & Individual & Family relative abundance [0-1] &  \\
+\midrule
+\multirow{7}{*}{Environmental} & \multirow{2}{*}{Vegetation} & Vegetation PC1 & Continuous & Site & Habitat attributes PC1 &  \\
+ & & Vegetation PC2 & Continuous & Site & Habitat attributes PC2 & \citep{Gottdenker2014-by,Patz2000-cg,Kiene2021-ie} \\
+\cmidrule{2-6}
+ & Distance & Village distance & Continuous & Individual & Distance in [m] from the nearest village center &  \\
+\cmidrule{2-7}
+ & \multirow{3}{*}{Community density} & Rat density & Continuous & Site & Density of rat population at the site &  \\
+ & & Non-native density & Continuous & Site & Density of non-native (shrews and house mice) at the site & \citep{Patterson2013-tk,Arneberg1998-bl,Begon2002-or,Gajewski2024-wb} \\
+ & & Native density & Continuous & Site & Density of native sp. populations at the site & \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{landscape}
+
+\clearpage
+
+\begin{table}[h]
+\centering
+\caption{Hyperparameter grid search settings for the XGBoost model.}
+\label{tab:table 2}
+\begin{tabular}{l c p{9.5cm}}
+\toprule
+\textbf{Hyperparameter} & \textbf{Values} & \textbf{Description} \\
+\midrule
+max\_depth & 1, 2, 3 & Maximum depth of a tree; controls model complexity. \\
+eta & 0.002, 0.01, 0.1 & Learning rate; scales the contribution of each tree. \\
+colsample\_bytree & 0.4, 0.6 & Fraction of features sampled per tree. \\
+min\_child\_weight & 6, 8 & Minimum sum of instance weight needed in a child. \\
+subsample & 0.5, 0.7 & Fraction of training data sampled per tree. \\
+lambda & 5, 10 & L2 regularization term on weights; reduces overfitting. \\
+alpha & 2, 5 & L1 regularization term on weights; encourages sparsity. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_network.pdf}
+	\caption{\textbf{Visualization of the rat-protozoa bipartite network.} Nodes represent individual rat \textit{Rattus rattus} hosts and protozoa OTUs, with edges indicating infections. Blue-shaded nodes denote host infection profiles, while yellow-to-red shaded nodes represent protozoa infection profiles.
+  }
+\label{figure_SI_network.pdf}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_otu_distribution.pdf}
+	\caption{\textbf{Protozoa OTUs prevalence distribution and taxonomy.} The prevalence of 41 OTUs, measured as their occupancy out of the 841 hosts, ordered from highest to lowest. Colors represent the lowest taxonomic classification (genus or species) of each OTU.
+  }
+\label{figure_SI_otu_distribution}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_correlations.pdf}
+	\caption{\textbf{Correlations between features.} Pairwise correlations were computed between all features. Pearson correlation was used for continuous–continuous pairs, point-biserial correlation for continuous–dichotomous pairs, and tetrachoric correlation when both features were dichotomous. Colors represent the strength and direction of the correlations: red indicates positive, and blue indicates negative relationships.
+  }
+\label{figure_SI_correlations}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=0.7\textwidth]{Figures/figure_SI_shap_all.pdf}
+	\caption{\textbf{SHAP dependency plots for all features.} SHAP dependency plots show individual hosts' SHAP values as a function of feature values. For clarity, we visualized only the LOESS-derived trendline and its associated confidence interval for the 841 host samples, rather than displaying all individual host data points. Line colors represent different host infection profiles, while the dashed gray line marks a SHAP value of zero. Y-axis values were rounded to two decimal places.
+  }
+\label{figure_SI_shap_all}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+
+\subsection*{SI note 1: Study site and small mammal sampling}\label{sec:SI_note_1}
+Small mammals were collected in the vicinity of three villages in the SAVA Region of northeast Madagascar, in the surroundings of Marojejy National Park. The village of Mandena (14.477049° S, 49.8147° E) was sampled between October 2019 and September 2020. A second village, Sarahandrano (14.607567° S, 49.647759° E), was sampled between November 2020 and September 2021, while a third village, Andatsakala (14.397276° S, 49.8820° E), was sampled between October 2021 and August 2022. In the vicinity of each village, seven sites were sampled along a degradation gradient: (1) semi-intact natural forest inside the national park, (2) secondary forest, (3) \textit{savoka} (brushy regrowth), (4) agroforest (vanilla plantation), (5) mixed agriculture (sugarcane/coffee plantation), (6) flooded rice, and (7) the village itself. Sites near each village were located $\sim$500 m apart.
+
+For sampling small mammals, a 100 m X 100 m grid of 121 live traps (11x11) was established, including 97 Sherman (H. B. Sherman Traps, Inc., Tallahassee, Florida, model LFA and XLK), and 24 Tomahawk (Tomahawk Live Trap, Hazelhurst, Wisconsin, model 201), placed 10 m apart and baited with peanut butter. Additionally, two pitfall lines were installed between 20-50 m outside of the grid, running in parallel to the grid edge. Each pitfall line was 100 m in length, with 11 buckets dug into the ground and placed every 10 m, and an 80 cm high vertically oriented plastic fencing bisecting each bucket, stapled to vertical stakes, and a flange touching the ground covered with soil and leaf litter to block the passage of small mammals and guide them to a bucket. Each plot was sampled for six consecutive nights and during three different sampling periods (before the wet season, after the wet season, and during the dry season).
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_study_site.pdf}
+	\caption{\textbf{Study site and sampling scheme.} \textbf{(a)} Sampling was conducted in northeastern Madagascar, in three different zones associated with three villages near Marojejy National Park. \textbf{(b)} In each village, seven distinct land-use types were sampled. The map illustrates the village of Mandena as an example. The images depict typical landscapes from top to bottom: semi-intact forest, \textit{savoka}, flooded rice fields, and village plots. \textbf{(c)} In each plot, an 11×11 trapping grid consisting of Sherman and Tomahawk traps was installed, along with two pitfall lines. A total of 841 individual \textit{Rattus rattus} were captured.
+  }
+\label{figure_SI_study_site}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+
+\subsection*{SI note 2: Measuring host traits and environmental features}
+\label{sec:SI_note_2}
+To explore determinants of parasite infection patterns, we measured three environmental variables (vegetation, small mammal community, and distance to the village center) and six host variables (mass, body condition index, sex, age, nematode co-infection, and gut microbiome composition) (\textbf{Table \ref{tab:table 1}}). The host variables and distance to the village are specific to each individual rat, while the environmental variables are specific to a site and common to all the rats captured at a specific site in a specific season.
+
+\subsubsection*{Habitat attributes}
+We measured two environmental gradients across sites: vegetation and the distance from the village center. These variables collectively capture much of the natural and anthropogenic variation across the landscape and are related to the environmental reservoir of parasites. The distance to the nearest village was measured using a GPS logger as the shortest distance from the village center to the trap location where the rat was captured.
+
+In addition, with the help of a specialist botanist, we measured habitat attributes in 16 plots (5m × 5m) within the sampling grid at each site, conducting measurements three times (seasons) during the sampling period. At each plot, we assessed eight habitat characteristics: (1) number of trees, (2) number of dead logs, (3) tree diameter at breast height, (4) tree height, (5) percent canopy cover, (6) number of lianas, (7) herbaceous vegetation height, and (8) percent herbaceous vegetation cover. We averaged the measurements across all plots to calculate mean values for each site per season. To explore habitat variation between sites, we conducted a principal component analysis (PCA). Prior to analysis, all variables were centered at 0 and rescaled to have unit variance. The first two principal components explained 80.71\% of the variation across sites (PC1: 59.51\%, PC2: 21.2\%) (\textbf{Figure \ref{figure_SI_vegetation}}). Vegetation PC1 divides the more natural sites (semi-intact forest and secondary forest) from the more disturbed sites. PC2 is positively correlated with herbaceous vegetation cover and height.
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_vegetation.pdf}
+	\caption{\textbf{Vegetation PCA across land-use types.} The first two principal components (PC1 and PC2) from the PCA of vegetation attributes. Each point represents a site in one season, with shape denoting the village and color representing the land-use type. Arrow length and direction indicate the contribution of each vegetation variable to the first two PCs.
+  }
+\label{figure_SI_vegetation}
+\end{figure}
+\FloatBarrier
+
+\subsubsection*{Small mammal community}
+Population density can influence infection patterns, as higher contact rates in denser populations may increase parasite transmission within and between host species. Therefore, for each site and season, we measured small mammal density for (1) the rat (\textit{Rattus rattus}) population, (2) other non-native species (including \textit{Mus musculus} and \textit{Suncus} spp.), and (3) native species (including members of the family Tenrecidae and subfamily Nesomyinae). Density was calculated as the total abundance of individuals in categories 1–3 at a given site-season, divided by the number of traps at that site. For the rat population, pitfall traps were excluded from calculations, as only two individuals (0.2\%) were captured in them. The small mammal community significantly differed between more natural sites (semi-intact forest and secondary forest) and more disturbed sites (\textbf{Figure \ref{figure_SI_sm}}).
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_sm.pdf}
+	\caption{\textbf{Small mammal community PCA across land-use types.} The first two principal components (PC1 and PC2) from the PCA of small mammals species. Each point represents a site in one season, with shape denoting the village and color representing the land-use type. Arrow length and direction indicate the contribution of each species to the first two PCs. The arrow colors indicate native (blue) and non-native (red) species.  
+  }
+\label{figure_SI_sm}
+\end{figure}
+\FloatBarrier
+
+\subsubsection*{Body condition}
+To assess the physiological condition of individual rats, we calculated a Body Condition Index (BCI) based on the residuals from a linear regression of body mass on structural body length. Because body size and growth patterns can differ significantly between age classes and sexes, we calculated BCI separately for each combination of age group (sub-adult/adult) and sex. For each subgroup, we log-transformed both body mass ($M$) and head-body length ($L$) to linearize the allometric relationship. We then fit a linear model of the form:
+
+\begin{equation}
+\log(M_i) = \beta_0 + \beta_1 \log(L_i) + \varepsilon_i
+\end{equation}
+
+where $M_i$ is the mass of individual $i$, $L_i$ is its head-body length, $\beta_0$ and $\beta_1$ are the intercept and slope of the regression, and $\varepsilon_i$ is the residual. The residuals $\varepsilon_i$ from this regression represent the BCI, with positive values indicating individuals heavier than expected for their body length (i.e., better condition), and negative values indicating poorer condition. These residuals were used as a continuous predictor of host condition in the subsequent statistical model.
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=1\textwidth]{Figures/figure_SI_BCI.pdf}
+	\caption{\textbf{Body Condition Index (BCI) of individual rat hosts.} BCI was calculated by the residuals from a linear regression of body mass [g] on structural body length [mm] for each combination of age group (sub-adult/adult) and sex (female/male).
+  }
+\label{figure_SI_BCI}
+\end{figure}
+\FloatBarrier
+
+\subsubsection*{Gut microbiome}
+DNA was extracted from $\sim$1g feces collected from trapped small mammals using Zymo Quick-DNA Fecal/Soil Microbe Miniprep kits (cat \#D6010) using manufacturer protocols. 16S metabarcoding was conducted using 515F–806R primers to target the V4 region of the 16S SSU rRNA \cite{Caporaso2012-af}. Each primer included an Illumina adapter, barcode, primer pad, and linker. Reactions were carried out in 25 $\mu$L volumes consisting of 10 $\mu$L of 1.25 $\mu$M forward and reverse primer, 2 $\mu$L of DNA, and 13 $\mu$L of Platinum Hot Start PCR mastermix (ThermoFisher Scientific, cat \#13000014). Reaction conditions were as follows: 95°C for 3min, 35x 98°C for 30secs, 58°C for 30secs, and 72°C for 30 s, followed by a final extension at 72°C for 5min. Concentrations were measured using Promega One Quantifluor kits on a Tecan plate reader. Samples were then normalized to 7 ng/$\mu$L prior to pooling. The product was cleaned using magnetic beads (bead:DNA ratio was 0.8:1) and sequenced at UC Santa Barbara Biological Nanostructures Laboratory on an Illumina MiSeq (v3 chemistry, 2x300 bp, 24M reads). 
+
+Sequences were demultiplexed using cutadapt (v.3.4) with zero error tolerance \citep{Martin2011-yj}. We then performed quality filtering steps using the \textit{dada2} package in R \citep{Callahan2016-wj}. Specifically, we filtered and trimmed amplicons (minimum length = 100, 15\% PhiX removed), inferred and removed errors, dereplicated sequences, inferred amplicon sequencing variants (ASVs) using the pseudo-pooling method, merged pairs, and removed chimeras. We assigned taxonomic identifications to ASVs using the \textit{assignTaxonomy} function in \textit{dada2}, using the SILVA nr99 SSU reference database (v.138.1).
+
+We filtered out very rare ASVs with a relative abundance lower than 0.1\% in a sample or those that occur in less than 1\% of all individuals. Additionally, we removed all non-bacterial ASVs or those that were identified as 'Chloroplast' or 'Mitochondria'. Finally, we excluded 21 samples with fewer than 5000 total reads from our analysis. Filtering procedures resulted in 1,951 ASVs from an original total of 10,358. 
+
+We aggregated ASVs at the family level for each individual host. ASVs with unidentified families were excluded, resulting in the analysis of 1,770 ASVs (90.72\% of all ASVs) classified into 55 families. To examine microbiome variation among individuals, we performed a principal coordinate analysis (PCoA). The first two principal coordinates explained 56.8\% of the variation (PCo1: 36.5\%, PCo2: 20.3\%) (\textbf{Figure \ref{figure_SI_microbiome}}). For better interpretability, we selected as features only the microbial families that exhibited a significant correlation with the first two principal coordinates (PCos). To achieve this, we utilized the equilibrium circle (or correlation circle), a graphical tool that helps interpret the contribution of variables to the principal coordinates. The radius of the equilibrium circle is given by $\text{Radius} \propto \left(\frac{d}{p}\right)^{0.5}$, where $d$ represents the number of retained principal coordinates (two in our case), and $p$ denotes the total number of original variables. A variable (microbial family) with a vector extending beyond the equilibrium circle indicates a strong correlation with at least one principal coordinate, signifying a major role in the ordination. Conversely, vectors within the circle reflect weaker correlations and lower contributions to the PCoA structure. Based on this criterion, we identified four microbial families as significant and included them as features in the final XGBoost model: (1) \textit{Lachnospiraceae}, (2) \textit{Lactobacillaceae}, (3) \textit{Muribaculaceae}, and (4) \textit{Prevotellaceae}.
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=0.8\textwidth]{Figures/figure_SI_microbiome.pdf}
+	\caption{\textbf{PCoA of the gut microbiome across individual rat hosts.} The first two principal coordinates (PCo1 and PCo2) are shown. Each point represents an individual rat, with the circle marking the equilibrium threshold. Arrow length and direction indicate the contribution of each microbial family to the first two PCos, with only families whose arrows extend beyond the equilibrium circle displayed.
+  }
+\label{figure_SI_microbiome}
+\end{figure}
+\FloatBarrier
+
+\subsubsection*{Nematode co-infection}
+We performed metabarcoding using the NC1/NC2 primer set \citep{Gasser1993-kr} to amplify ITS2 ribosomal DNA from strongylid nematodes. Forward and reverse primers contained 8-nucleotide barcodes with a Hamming distance of at least 4. PCR reactions were carried out in 15$\mu$L volumes consisting of: 3 $\mu$L of each forward and reverse primer (2 $\mu$M stock concentration); 7 $\mu$L from a Mastermix comprised of 0.7 $\mu$L of Amplitaq Gold polymerase, 150 $\mu$L MgCl2, 150 $\mu$L Amplitaq Gold buffer, 12 $\mu$L BSA, 6 $\mu$L DMSO, and 344 $\mu$L water; and up to 2 $\mu$L template DNA (1–100 ng total). Cycling conditions were: 10-minute hot-start activation, 35x cycles of 15 s at 95°C, 30 s at 55°C, 40 s at 72°C, and a final 5-min extension at 72°C. DNA concentrations were then measured, pooled, normalized, and purified using MinElute columns prior to multiplexing with additional libraries. The final library for each village was sequenced three times on an Illumina MiSeq (v3 2 × 300 bp, 25 M reads) at the UC Davis Genome Center. Sequences were demultiplexed using cutadapt (v.3.4) with zero error tolerance \citep{Martin2011-yj}. We used the \textit{dada2} bioinformatics pipeline \citep{Callahan2016-wj} to filter and trim amplicons (minimum length = 100, 15\% PhiX removed), remove errors, dereplicate, infer amplicon sequence variants (ASVs) using the pseudo-pooling method, merge pairs, remove chimeras, and combine the three ASV read tables from the different villages into one table. We then calculated the relative read abundance of each ASV and excluded reads that accounted for less than 1\% of a sample's relative read abundance to avoid potential sequencing errors or tag jumps. We excluded a small subset of samples that failed to amplify across other primer sets, and used the assignTaxonomy function with minimum bootstraps = 50 to identify ASV sequences using the nemabiome ITS2 reference database (v 1.6.0). Next, we clustered phylogenetically similar ASVs into OTUs at 97\% similarity using the 'Clusterized' function from the \textit{DECIPHER} package. Taxonomy was assigned to each OTU based on its most common ASV.
+
+To examine variation in nematode co-infection among individual hosts, we plotted the distribution of the number of nematode OTUs infecting each host (\textbf{Figure \ref{figure_SI_nc_distribution}}). Because the distribution was highly skewed, with most rats infected by only a single nematode OTU, we included a binary variable in the final model indicating whether or not the host was infected by any nematode species (infected: n = 626; uninfected: n = 215).
+
+\begin{figure}[h!t]
+    \centering
+	\includegraphics[width=0.8\textwidth]{Figures/figure_SI_nc_distribution.pdf}
+	\caption{\textbf{Distribution of the number of nematode OTUs infecting each host.}
+  }
+\label{figure_SI_nc_distribution}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+\subsection*{SI note 3: Details on model evaluation metrics}
+In multi-class classification models, the output is a probability distribution over the possible classes (i.e., the probabilities of a host being classified into one of the host infection profiles). This is achieved using a softmax function, which converts raw scores into probabilities that sum to 1. The predicted class is the one with the highest probability.
+
+To evaluate the performance of our three-class classification model, we used a confusion matrix, which records the number of correctly and incorrectly classified instances for each class \citep{Grandini2020-nl}. The confusion matrix is structured as follows:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lccc}
+        \toprule
+        Actual \textbackslash{} Predicted & Pred A & Pred B & Pred C \\
+        \midrule
+        \textbf{Actual A} & $TP_A$ & $FP_{B,A}$ & $FP_{C,A}$ \\
+        \textbf{Actual B} & $FP_{A,B}$ & $TP_B$ & $FP_{C,B}$ \\
+        \textbf{Actual C} & $FP_{A,C}$ & $FP_{B,C}$ & $TP_C$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Confusion Matrix for a 3-Class Model. A-C are host infection profiles.}
+    \label{tab:confusion_matrix}
+\end{table}
+
+Each row represents the actual class, while each column represents the predicted class.
+
+- $TP_X$ (True Positives): Correctly classified instances of class $X$.
+
+- $FP_{Y,X}$ (False Positives): Instances incorrectly classified as class $Y$ when they actually belong to class $X$.
+
+Since our dataset is imbalanced, we used evaluation metrics that give fair importance to each class based on the class size (i.e., fraction of hosts with the infection profile). These include accuracy, weighted precision, weighted recall, weighted F1-score, weighted balanced accuracy, and the Matthews Correlation Coefficient (MCC) \citep{Poisot2023-jo}.
+
+\textbf{Accuracy:}
+Accuracy measures the overall correctness of the model:
+\begin{equation}
+    \text{Accuracy} = \frac{TP_A + TP_B + TP_C}{N}
+\end{equation}
+where $N$ is the total number of samples.
+
+\textbf{Weighted Precision:}
+Precision for class $X$ is the proportion of correctly predicted $X$ instances out of all instances predicted as $X$:
+\begin{equation}
+    P_X = \frac{TP_X}{TP_X + \sum FP_{X,Y}}
+\end{equation}
+The weighted precision is:
+\begin{equation}
+    P_w = \sum_{X \in \{A,B,C\}} w_X P_X
+\end{equation}
+where $w_X$ is the proportion of actual instances of class $X$.
+
+\textbf{Weighted Recall:}
+Recall (Sensitivity) for class $X$ measures how many actual $X$ instances were correctly classified:
+\begin{equation}
+    R_X = \frac{TP_X}{TP_X + \sum FP_{Y,X}}
+\end{equation}
+The weighted recall is:
+\begin{equation}
+    R_w = \sum_{X \in \{A,B,C\}} w_X R_X
+\end{equation}
+
+\textbf{Weighted F1-score:}
+F1-score is the harmonic mean of precision and recall for each class:
+\begin{equation}
+    F1_X = 2 \times \frac{precision \times recall}{precision + recall}
+\end{equation}
+The weighted F1-score is:
+\begin{equation}
+    F1_w = \sum_{X \in \{A,B,C\}} w_X F1_X
+\end{equation}
+
+\textbf{Weighted Balanced Accuracy:}
+Balanced accuracy accounts for class imbalance and is calculated as the mean recall across classes:
+\begin{equation}
+    BA_X = \frac{TP_X}{TP_X + \sum FP_{Y,X}}
+\end{equation}
+The weighted balanced accuracy is:
+\begin{equation}
+    WBA = \sum_{X \in \{A,B,C\}} w_X B_X
+\end{equation}
+
+\textbf{Matthews Correlation Coefficient (MCC):}
+MCC is a more comprehensive metric that considers all values in the confusion matrix, and is, therefore, a balanced measure that can be used even if the classes are of very different sizes:
+\begin{equation}
+    MCC = \frac{c \times s - \sum_{X \in \{A,B,C\}} p_X \times t_X}
+    {\sqrt{\left(s^2 - \sum_{X \in \{A,B,C\}} p_X^2\right) \left(s^2 - \sum_{X \in \{A,B,C\}} t_X^2\right)}}
+\end{equation}
+where: \\
+ c = sum of true positives across all classes \\
+ s = total number of samples \\
+ \(p_X\) = predicted counts for each class \(TP_X+FP_{XY}\) \\
+ \(t_X\) = actual counts for each class \(TP_X+FP_{YX}\) \\
+ 
+ MCC values range from $-1$ to $+1$. A coefficient of $+1$ indicates a perfect prediction, 0 indicates no better than a random prediction, and $-1$ indicates total disagreement between prediction and observation.
+
+To further assess model performance, we compared all metrics against a theoretical no-skill classifier, whose expected values were analytically computed based on profile distributions using proportional guessing. In this approach, the classifier predicts each profile according to its prevalence in the dataset, favoring frequent profiles over rare ones. This reflects the natural class distribution without relying on learned patterns. For this classifier, accuracy, precision, and recall scale with profile frequencies, while balanced accuracy remains equivalent to a uniform guessing strategy, providing a simple baseline despite class imbalance. The theoretical MCC for an ideal random classifier is zero. This method offers a straightforward way to benchmark our trained model’s performance against random chance, especially in datasets with imbalanced classes.
+
+In addition, we used evaluation metrics in a one-vs-all manner, where the predicted class is considered positive, and the remaining classes are treated as negative. The model's performance was then evaluated across multiple threshold values (i.e., classifying a sample into class X only if its probability exceeds threshold Y) by computing the Area Under the Receiver Operating Characteristic curve (AUC-ROC) and the Area Under the Precision-Recall Curve (PR-AUC) for each class separately.
+
+\textbf{\textit{ROC-AUC}}: The area under the receiver operating characteristic curve is a graphical representation of the actual positive rate (y-axis) versus the false positive rate (x-axis) of a model across different decision thresholds. The ROC-AUC score ranges from 0 to 1, where a score of 1 represents a perfect classification model, while a score of 0.5 represents a one-vs-all model with random guessing.
+
+Although the ROC-AUC is a common measure, the number of true negatives in imbalanced data sets is very large, so even with a substantial number of false positives, the false positive rate might remain relatively small. This means that the ROC curve might not fully capture the cost of misclassifying a substantial number of the minority class instances. A better way to evaluate predictions in imbalanced data sets is by combining precision and recall metrics. Precision and recall provide a more granular understanding of a model's performance because their trade-off highlights how well the model balances false positives and false negatives, offering insight into its effectiveness in identifying true cases under different thresholds.
+
+\textbf{\textit{PR AUC}}: To evaluate the tradeoff between precision and recall, the area under the PR curve provides a single number that summarizes the overall performance of a model across all possible classification thresholds. Like the ROC-AUC curve, the PR curve is calculated across all thresholds. We calculated a PR curve for each class. The no-skill baseline PR-AUC was derived from class prevalence, meaning that a random classifier’s expected precision equaled the fraction of positive instances in the dataset (i.e., the fraction of hosts in the infection profile out of all hosts).
+
+\clearpage
+
+\subsection*{SI note 4: Results of model evaluation}
+Our XGBoost model demonstrated strong overall performance, significantly predicting infection across all host profiles (\textbf{Figure \ref{figure_SI_evaluation}}). All evaluation metrics exceeded those of a no-skill classifier, including accuracy (0.54), weighted precision (0.53), weighted recall (0.54), weighted F1-score (0.53), weighted balanced accuracy (WBA) (0.64), and Matthews correlation coefficient (MCC) (0.28) (\textbf{Figure \ref{figure_SI_evaluation}A}).
+
+The Area Under the Receiver Operating Characteristic Curve (AUC-ROC) was above the random value of 0.5 for all profiles (AUC = 0.726, 0.606, 0.738, for profiles 1, 2, and 3, respectively), indicating effective classification accuracy (\textbf{Figure \ref{figure_SI_evaluation}B}). However, the relatively lower ROC curve for profile 2 (reflecting a low true positive to false positive rate) suggests that the model only weakly distinguished it from other profiles. The Precision-Recall Curve (PR-AUC) is useful for imbalanced datasets, as it captures the tradeoff between precision and recall. The PR-AUC was above the no-skill values (i.e., the fraction of hosts with each infection profile) for the three host profiles: AUC = 0.548 (no-skill of 0.322) for profile 1; AUC = 0.331 (no-skill of 0.244) for profile 2; and AUC = 0.656 (no-skill of 0.434) for profile 3 (\textbf{Figure \ref{figure_SI_evaluation}C}). Overall, while the model performed well, it had greater difficulty accurately predicting profile 2.
+
+\begin{figure}[h!t]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/figure_SI_evaluation.pdf}
+    \caption{\textbf{Evaluation of the XGBoost predictive model}. \textbf{(A)} Comparison between the XGBoost model and a no-skill classifier in different evaluation metrics. The bars and error bars indicate the mean and standard deviation, respectively, of the three-fold models used for nested cross-validation. \textbf{(B)} The Area Under the Receiver Operating Characteristic Curve (AUC-ROC) for each profile separately. Colors indicate infection profiles, while the dashed black line indicates random model performance (AUC = 0.5). \textbf{(C)} Precision-Recall Curves (PR-AUC) for each profile separately. The dashed black lines indicate a no-skill model for each profile, derived from profile prevalence (i.e., a random expectation equal to the fraction of hosts with the infection profile). See \textbf{SI note 3} for detailed explanations on model evaluation.
+    }
+    \label{figure_SI_evaluation}
+\end{figure}
+\FloatBarrier
+
+
+\end{document}

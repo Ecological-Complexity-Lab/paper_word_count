@@ -1,0 +1,619 @@
+% Template for PLoS
+% Version 3.6 Aug 2022
+%
+% % % % % % % % % % % % % % % % % % % % % %
+%
+% -- IMPORTANT NOTE
+%
+% This template contains comments intended 
+% to minimize problems and delays during our production 
+% process. Please follow the template instructions
+% whenever possible.
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Once your paper is accepted for publication, 
+% PLEASE REMOVE ALL TRACKED CHANGES in this file 
+% and leave only the final text of your manuscript. 
+% PLOS recommends the use of latexdiff to track changes during review, as this will help to maintain a clean tex file.
+% Visit https://www.ctan.org/pkg/latexdiff?lang=en for info or contact us at latex@plos.org.
+%
+%
+% There are no restrictions on package use within the LaTeX files except that no packages listed in the template may be deleted.
+%
+% Please do not include colors or graphics in the text.
+%
+% The manuscript LaTeX source should be contained within a single file (do not use \input, \externaldocument, or similar commands).
+%
+% % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- FIGURES AND TABLES
+%
+% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
+%
+% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
+% - Figures should be uploaded separately from your manuscript file. 
+% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
+% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
+% For figure citations, please use "Fig" instead of "Figure".
+% See http://journals.plos.org/plosone/s/figures for PLOS figure guidelines.
+%
+% Tables should be cell-based and may not contain:
+% - spacing/line breaks within cells to alter layout or alignment
+% - do not nest tabular environments (no tabular environments within tabular environments)
+% - no graphics or colored text (cell background color/shading OK)
+% See http://journals.plos.org/plosone/s/tables for table guidelines.
+%
+% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
+%
+% IMPORTANT
+% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://journals.plos.org/plosone/s/latex
+%
+% For inline equations, please be sure to include all portions of an equation in the math environment.  For example, x$^2$ is incorrect; this should be formatted as $x^2$ (or $\mathrm{x}^2$ if the romanized font is desired).
+%
+% Do not include text that is not math in the math environment. For example, CO2 should be written as CO\textsubscript{2} instead of CO$_2$.
+%
+% Please add line breaks to long display equations when possible in order to fit size of the column. 
+%
+% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
+%
+% When adding superscript or subscripts outside of brackets/braces, please group using {}.  For example, change "[U(D,E,\gamma)]^2" to "{[U(D,E,\gamma)]}^2". 
+%
+% Do not use \cal for caligraphic font.  Instead, use \mathcal{}
+%
+% % % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Please contact latex@plos.org with any questions.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+\usepackage{physics}
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{cleveref}
+\crefname{figure}{Fig}{Figs}
+\crefname{table}{Table}{Tables}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage[nopatch=eqnum]{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% color can be used to apply background shading to table cells only
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+% array package and thick rules for tables
+\usepackage{array}
+
+% create "+" rule type for thick vertical lines
+\newcolumntype{+}{!{\vrule width 2pt}}
+
+% create \thickcline for thick horizontal lines of variable length
+\newlength\savedwidth
+\newcommand\thickcline[1]{%
+  \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+  \cline{#1}%
+  \noalign{\vskip\arrayrulewidth}%
+  \noalign{\global\arrayrulewidth\savedwidth}%
+}
+
+% \thickhline command for thick horizontal lines that span the table
+\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+\hline
+\noalign{\global\arrayrulewidth\savedwidth}}
+
+
+% Remove comment for double spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+\renewcommand{\figurename}{Fig}
+
+% Use the PLoS provided BiBTeX style
+\usepackage[square,comma]{natbib}
+\bibliographystyle{plos2015}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+%\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+%\setlength{\headheight}{27.023pt}
+%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\today}
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+%% END MACROS SECTION
+
+
+\begin{document}
+\vspace*{0.2in}
+
+% Title must be 250 characters or less.
+\begin{flushleft}
+{\Large
+\textbf\newline{The interplay between ecological networks drives host-plasmid community dynamics} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
+}
+\newline
+% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
+\\
+Ying-Jie Wang\textsuperscript{1*},
+Kaitlin A. Schaal\textsuperscript{2\Yinyang},
+Johannes Nauta\textsuperscript{3,\Yinyang},
+Armun Liaghat\textsuperscript{4},
+Manlio De Domenico\textsuperscript{3},
+James P. J. Hall\textsuperscript{2},
+Shai Pilosof\textsuperscript{1*}
+\\
+\bigskip
+\textbf{1} Department of Life Sciences, Ben-Gurion University of the Negev, Beer-Sheva 84105, Israel
+\\
+\textbf{2} Department of Evolution, Ecology and Behaviour, Institute of Infection, Veterinary and Ecological Sciences, University of Liverpool, Liverpool L69 7ZB, UK
+\\
+\textbf{3} Department of Physics and Astronomy “Galileo Galilei”, University of Padova, Padova 35131, Italy
+\\
+
+\textbf{4} Department of Ecology and Evolution, University of Chicago, Chicago, IL 60637, USA
+\\
+\bigskip
+
+% Insert additional author notes using the symbols described below. Insert symbol callouts after author names as necessary.
+% 
+% Remove or comment out the author notes below if they aren't used.
+%
+% Primary Equal Contribution Note
+\Yinyang These authors contributed equally to this work.
+
+% Use the asterisk to denote corresponding authorship and provide email address in note below.
+* lanexran@gmail.com, pilos@bgu.ac.il
+
+\end{flushleft}
+% Please keep the abstract below 300 words
+\section*{Abstract}
+Plasmids drive bacterial evolution by transferring adaptive traits, such as metabolism and antimicrobial resistance, between members of microbial communities. There are trends and barriers to plasmid transmission, which likely emerge from both host-plasmid interactions (e.g. plasmid host ranges), and plasmid-plasmid interactions (e.g. plasmid incompatibility). However, while both interaction networks likely play a joint role in driving the dynamics of plasmids and species in a microbiome, they have only been studied separately. We used an agent-based model to simulate multihost-multiplasmid community dynamics, manipulating network structures. We reveal that the interplay between network structures affects host coexistence, population composition, and plasmid prevalence. Specifically, modular and hub-structured plasmid incompatibility promotes bacteria coexistence, and a modular host-plasmid infection network promotes plasmid diversity. We experimentally validated our model using a 3-bacteria-2-plasmid system with a known modular infection network, showing that a structured interaction network was necessary to recapitulate experimental results. By combining modeling and experiment we highlight the importance of network structures to plasmid maintenance dynamics. Our results indicate that integrating multiple interaction types is necessary to predict the fate of plasmids in microbial communities, and highlight a need to understand both host-plasmid and plasmid-plasmid interactions when considering the spread of high-impact plasmids in microbiomes. More broadly, our work highlights the importance of explicitly considering the interplay between ecological interactions to understand the dynamics of systems involving multiple hosts and infectious agents.
+
+
+% Please keep the Author Summary between 150 and 200 words
+% Use first person. PLOS ONE authors please skip this step. 
+% Author Summary not valid for PLOS ONE submissions.   
+\section*{Author summary}
+Plasmids help bacteria adapt and evolve by horizontally transferring traits such as metabolism or antibiotic resistance. Their spread in microbiomes is shaped by interactions with bacterial hosts and other plasmids. However, how the combined structure of host–plasmid and plasmid–plasmid interactions influences microbial community dynamics remains unclear. We explored this fundamental question using microbial communities and plasmids---small genetic elements that move between bacteria, helping them adapt and evolve. We built a computational model to understand how two ecological networks interact: one network describing which plasmids infect which bacteria, and another describing how plasmids interact inside bacteria. We performed laboratory experiments using a system with a modular infection network and parameterized our model to match it. The model successfully reproduced the experimental results, allowing us to explore the role of network structure. When we ran the same model with alternative (unstructured) network configurations, it produced qualitatively different dynamics. Therefore, our combined modeling and experimental approach demonstrates that understanding community dynamics requires considering the interplay between multiple types of ecological networks. Our work provides a generalizable framework for understanding how diverse ecological interactions jointly shape community dynamics, directly addressing fundamental questions at the intersection of community ecology, network theory, and infectious disease dynamics.
+
+\linenumbers
+
+% Use "Eq" instead of "Equation" for equation citations.
+\section*{Introduction}
+Plasmids play a vital role in the eco-evolutionary dynamics of host communities. As extrachromosomal, semi-autonomous, mobile genetic elements (MGEs), plasmids can spread among host organisms, accelerating adaptation by transferring genes that confer advantageous traits such as antibiotic resistance \cite{Kornelia2015-hn, San-Millan2018-bi, Rodriguez-Beltran2021-ue}. Plasmids can also impose fitness costs on their hosts, which emerge from conflicts between chromosomal- and plasmid-encoded genes and the metabolic burdens of plasmid gene expression \cite{San_Millan2017-xt, Hall2021-lo}. However, these cost-benefit interactions between plasmids and their hosts are deeply shaped by other microbiome interactions, such as plasmid co-infection and host competition, which together influence plasmid dynamics and the coexistence of their constituent hosts \cite{Ghoul2016-vo, Coyte2022-xx, Igler2022-lv, Dewan2023-xt, Hall2016-zb, Kottara2021-wg, Pilosof2020-lz}. The impact of this interplay is often overlooked in studies of host-plasmid community dynamics.
+
+Plasmids can interact with multiple hosts as they transfer across populations, creating patterns of host infection shaped by variation in within- and between-population conjugation rates, compatibility with host genetic backgrounds, and host anti-plasmid defense systems \cite{Alderliesten2020-hv, Deep2022-ed, Jaskolska2022-ff}. Plasmids can also compete with one another for hosts, using mechanisms such as (in)compatibility groups, toxin-antitoxin systems, and plasmid-encoded defense systems to exclude one another \cite{Novick1987-us, San_Millan2014-ak, Dionisio2019-mh, Cooper2000-kr, Helinski2022-na, Pinilla-Redondo2020-if, Rocha2022-ub}. While some studies acknowledge the importance of multiple interaction types, they focus on simplified systems, such as multihost-uniplasmid \cite{Coyte2022-xx} or unihost-biplasmid systems \cite{Igler2022-lv}. However, in nature, hosts and plasmids form complex structures of interactions \cite{Pilosof2023-kx}. The few studies which consider multihost-multiplasmid systems omit or understate plasmid co-infection, focusing on a single interaction type \cite{Zhu2024-rr, Wang2020-wo, Risely2024-ls}. As a result, little is known about how the interplay of multiple interaction structures, specifically between host-plasmid interactions and plasmid co-infection, shapes community dynamics and stability. This gap in understanding hinders our ability to predict the assembly and evolutionary trajectories of these communities, particularly their potential in genetic innovation and adaptation. Nevertheless, addressing it is challenging because it requires connecting multiple and complex interaction types to dynamics.
+
+The interplay of different interaction types can be studied using ecological networks, which encode interactions (links) between multiple species (nodes). Ecological networks are valuable tools for studying how network structure (i.e., the pattern in which interactions are distributed across species) affects community dynamics and species coexistence \cite{Bastolla2009-xy, Thebault2010-jm}. Considering multiple ecological networks allows us to study how distinct, interconnected networks affect community dynamics \cite{Pilosof2017-sm, Pilosof2019-pu, Pilosof2020-lz, Liaghat2024-oy}. However, there is a paucity in studies that explicitly link dynamics to the interplay between networks, leading to a gap in our understanding of structure-dynamics in complex ecological communities.
+
+In this work, we use host-plasmid interactions to address this gap. We investigated how host infection and plasmid compatibility networks jointly affect host and plasmid dynamics and coexistence. While other interaction types exist (e.g., host-host interactions such as competition \cite{Coyte2015-dx, Coyte2022-xx} and horizontal gene transfer (HGT) \cite{Li2023-oa, Zhu2024-rr}), we focus on infection (a host-plasmid interaction) and plasmid compatibility (a plasmid-plasmid-interaction, \cref{fig:event_design_dyn_MF}a) because these interactions are significantly understudied in a network context despite being fundamental to host-plasmid communities. We developed an agent-based model (ABM) (\cref{fig:event_design_dyn_MF}b) that incorporates the structure of both networks and simulates the dynamics of host and plasmid populations. Our model omits perturbations that provide plasmids with advantages (e.g., antibiotics against which plasmids can carry resistance genes), so that network structures can be compared within a homogeneous abiotic environment. While the model is broadly applicable to systems of hosts and infectious agents, we focus on bacteria and plasmids throughout. We systematically vary the structures of the infection and plasmid compatibility networks to examine their individual and combined effects. Finally, we validate our model predictions using data from empirical laboratory experiments.
+
+\begin{figure*}[!h]
+    \includegraphics[width=\linewidth]{PLOS_Biology/Fig_1.pdf}
+    \caption{\textbf{Model overview and experimental design.} \textbf{(a)} The structures of the bacterial host-plasmid infection network $\vb{I}$ (which plasmid infect which hosts; top row) and plasmid-plasmid compatibility network $\vb{P}$ (which plasmids are compatible with each other and can therefore co-reside in a host individual; bottom row). The full structures serve as controls. We used a factorial experimental design of the nine structure combinations. \textbf{(b)} Illustration of the five main events in the ABM (see Methods for detailed model explanations). Dashed ovals indicate individual deaths. \textbf{(c)} An example of results of infection dynamics with modular $\vb{I}$ and full $\vb{P}$, including subpopulation dynamics (left), final relative abundance of host populations of all replicates (middle), and the mean and SE of final plasmid prevalence across replicates at the end (t $=20000$ hours) of the simulation (right).}
+\label{fig:event_design_dyn_MF}
+\end{figure*}
+
+% Results and Discussion can be combined.
+\section*{Results}
+\subsection*{Representing host-plasmid and plasmid-plasmid interactions using multiple ecological networks}
+To investigate how the interplay between ecological networks shapes dynamics, coexistence, and persistence within host-plasmid communities, we first defined typical structures for $\vb{I}$, the host-plasmid infection network and $\vb{P}$, the plasmid-plasmid compatibility network. To understand the relationship between network structure and dynamics in detail and from core principles, we intentionally used small networks (\cref{fig:event_design_dyn_MF}a). While this choice was primarily conceptual, focusing on tractability and interpretability, it also aligned with practical considerations, as simulating larger networks becomes computationally prohibitive (see Model limitations in Materials and Methods).
+
+Previous studies of host-MGE infection networks have focused on phages, but similar principles can be used to represent host-plasmid interactions. Host-phage networks are bipartite (contain two distinct sets of entities), and often exhibit modular and nested structures \cite{Flores2011-fx, Weitz2013-ye, Pilosof2020-lz} (e.g., \cref{fig:event_design_dyn_MF}a, top row). Hence, for $\vb{I}$ we defined three possible structures: (1) `Full', wherein all hosts can host all plasmids, serving as a reference (control). (2) `Nested', wherein specialist plasmids interact with a subset of hosts with which more generalist plasmids interact \cite{Flores2011-fx, Weitz2013-ye, Beckett2013-tz, Fortuna2019-tr}. Nestedness describes a hierarchical structure, and can arise if there is a trade-off between infecting multiple hosts and adapting to each host species~\cite{Weitz2013-ye, Fortuna2019-tr, Pilosof2020-lz} that leads to the evolution of a narrower host range. (3) `Modular', wherein plasmid-host interactions form three distinct modules: two peripheral modules of hosts that infected by distinct subsets of plasmids, and a bridge module where hosts can host a subset of plasmids from each of the peripheral modules (\cref{fig:event_design_dyn_MF}a, top row). Host H2 and plasmids P2 and P3 in the bridge module are termed the bridge host and bridge plasmids. Modularity can arise from a phylogenetic HGT barrier, where HGT occurs more often between closely related species \cite{Popa2011-lo, Popa2017-zd}. In our case, a modular structure arises when the bridge host is phylogenetically intermediate between the peripheral hosts, or when it lacks specific defenses to protect it from plasmid spillover from the peripheral hosts. Nestedness and modularity are signatures of host-MGE coevolution, where trade-offs between fitness and niche breadth result in specialization \cite{Weitz2013-ye, Fortuna2019-tr, Pilosof2020-lz}.
+
+Plasmid-plasmid interactions can be represented as unipartite networks where nodes are plasmids and links indicate plasmid compatibility. Hence, two linked plasmids can co-reside in the same host (e.g., \cref{fig:event_design_dyn_MF}a, bottom row). While the structure of plasmid compatibility network $\vb{P}$ has received little attention, we defined three structures, based on theories in disease and community ecology: (1) `Full', wherein all plasmids are compatible, serving as a reference (control). (2) `Modular', wherein plasmids in the module are compatible with each other. Modularity can arise if the plasmids form (in)compatibility groups \cite{Dionisio2019-mh, Helinski2022-na}. (3) `Hub', wherein a sole hub plasmid is the only one compatible with others, while non-hub plasmids have few interactions and can co-reside with only a limited set of plasmids. Hub structures can arise from differences in plasmid traits that allow some plasmids to be widely compatible with each other or to complement each other functionally, similar to generalist parasites in disease ecology~\cite{Light2005-es, Liu2022-mq, Rawstern2023-ua, Yang2020-cf}. Notably, hub structures could lead to a disproportionately high prevalence of a few plasmids that may carry genes such as those conferring antimicrobial resistance.
+
+\subsection*{The model links host-plasmid dynamics with network structures} 
+To understand how network structures affect population dynamics, we developed an agent-based model (ABM) that incorporates five demographic and stochastic events: growth, death, plasmid loss by segregation, competition between hosts, and plasmid transmission by conjugation (\cref{fig:event_design_dyn_MF}b). We employed a $3 \times 3$ factorial experimental design of the $\vb{I}$ and $\vb{P}$ structures. In each experiment we tracked the quantity $H_{i,p}$, which is the abundance of a microbial host population $i$ that can be infected with a combination of plasmids, forming subpopulations with a plasmid profile $p$ (\cref{fig:event_design_dyn_MF}c). We included three hosts (H1-3) and four plasmids (P1-4). We used a binary notation system to describe the plasmid profile of each host subpopulation. For example, the total population abundance $H_i = \sum_p H_{i,p}$ of a host $i$ might be split into two subpopulations $0000$ and $0011$. The first subpopulation is plasmid-free and the second is infected with plasmids P3 and P4. 
+
+To focus on the effects of network structure, we assumed that all plasmids and host populations have identical traits (e.g., growth and death rates, conjugation rates). That is, host and plasmid types differ only in their niches (node position) in the interaction networks. We modeled host competition for a shared limiting resource by applying community-level density-dependent growth (i.e. a community-wide carrying capacity) \cite{Haegeman2008-fn}. As such, we focus on cases where plasmids are costly, and do not consider the possible effects of perturbations. This choice allows us to isolate the structural effects on plasmid persistence and community dynamics from the effects of positive selection for plasmid-encoded traits. While plasmids often provide valuable traits enabling hosts to adapt to changes in the environment, understanding the maintenance of traits and the impact of plasmids in the absence of positive selection is important for assessing the resilience of communities to future perturbations, and plasmids have been shown to persist even in the absence of positive selection \cite{San_Millan2014-ak, Hall2016-zb, Lopatkin2017-pu}. Therefore, the perturbation-free results we obtained enable a broad theoretical development regarding most infectious agents, which generally do not provide advantages to their hosts.
+
+For each experiment, we calculated: (1) relative host abundance: the relative abundance of each host population out of the total community abundance; (2) plasmid prevalence: the fraction of host individuals across all populations which are infected with the plasmid; (3) host population composition: the proportions of subpopulations, each defined by a plasmid profile, within the host population; (4) host coexistence probability: the proportion of simulation replicates in which hosts coexisted at any given time point.
+
+\subsection*{Plasmid compatibility network structure promotes host coexistence}
+To understand the impact of the plasmid compatibility network $\vb{P}$ on community dynamics, we compared community dynamics under various structures of $\vb{P}$ while retaining a full infection network $\vb{I}$ (\cref{fig:end_full_I}a). Under full $\vb{I}$ and full $\vb{P}$, only one host population survived (\cref{fig:end_full_I}b(i); Fig S1). The identity of the host varied stochastically across replicate simulations, and the overall probability of a specific host surviving was about $1/3$, as expected. Throughout the simulation, the probability of host coexistence rapidly decreased to zero (\cref{fig:end_full_I}b(i)). The host coexistence pattern was driven by neutrality and demographic stochasticity that eventually caused extinction, as well as by the high proportion of subpopulations infected by all four plasmids that induced multiplicative costs and sped up extinction (\cref{fig:end_full_I}d(i); Fig S2). These heavily infected subpopulations acted as main plasmid donors, continually re-infecting available hosts. At the final time point, all subpopulations (i.e., all possible plasmid profiles) of the surviving hosts were still present, and population composition was the same regardless of which specific host survived (\cref{fig:end_full_I}d(i)). The four plasmids reached the same prevalence, infecting slightly more than half of the individuals of the sole surviving host (\cref{fig:end_full_I}c(i)). This plasmid prevalence pattern was driven by all host individuals infected by one or multiple plasmids.
+
+\begin{figure*}[!h]
+        \includegraphics[width=\linewidth]{PLOS_Biology/Fig_2.pdf}
+	\caption{\textbf{The effect of structure in the plasmid compatibility network $\vb{P}$ under a full infection network $\vb{I}$.} Columns i, ii, and iii represent different $\vb{P}$ structures. \textbf{(a)} Illustration of the different structures. \textbf{(b)} The dynamics of coexistence probability of host populations. \textbf{(c)} Mean and SE of final plasmid prevalence across all replicates. \textbf{(d)} Final host population composition, averaged across replicates in which that host population survived (only populations surviving in $>5$ replicates were considered). Profiles represent the host subpopulations (e.g., the profile 1000 represents a subpopulation hosting only P1).}
+\label{fig:end_full_I}
+\end{figure*}
+
+Introducing structure to plasmid compatibility drastically affected host coexistence patterns. When $\vb{P}$ had a modular or hub structure, one host population still out-competed the other two by the end of the simulation, but the process took up to $3$ times longer (\cref{fig:end_full_I}b). The average prevalence of the plasmids was similar to each other under each $\vb{P}$ structure, except for P1 infecting 100 $\%$ of its hosts as the hub plasmid (\cref{fig:end_full_I}c(ii-iii)). We found a possible explanation for the prolonged host coexistence and the plasmid prevalence patterns by comparing the final population compositions to the full $\vb{P}$ experiment (\cref{fig:end_full_I}d). Infections with four plasmids were highly costly therefore accelerating extinction. In contrast to a full $\vb{P}$, under modular or hub $\vb{P}$, no host subpopulation could be infected with all four plasmids. Instead, the surviving host population in each replicate simulation was comprised solely of subpopulations infected by two plasmids (either the two plasmids that shared a module, or the hub plasmid and one other; \cref{fig:end_full_I}d(ii-iii)). Structure in the plasmid compatibility network $\vb{P}$ could therefore alter host dynamics through plasmid cost and patterns of conjugation. While all of the communities ultimately collapsed to a single host population over the course of the simulations owing to the strict competition between hosts, $\vb{P}$ structures qualitatively altered plasmid fates and prolonged the period of host coexistence. In a natural community, these dynamic outcomes would provide greater opportunities for host and plasmid evolution.
+%%\FloatBarrier
+
+\subsection*{A modular infection network supports hosts and plasmid diversity}
+Next, we investigated the impact of infection network $\vb{I}$ (\cref{fig:end_full_P}a) on community dynamics. While under full $\vb{I}$, each of the three host populations had an equal chance to out-compete the others in each simulation, under nested $\vb{I}$ (hierarchical infections) the plasmid-specialist host H3 consistently excluded the other two populations (\cref{fig:end_full_P}b (i-ii)). As H3 could only be infected by the host-generalist P1, the other plasmids were lost from the community (\cref{fig:end_full_P}c(ii)). This outcome resulted from the lower net fitness cost to H3 of being susceptible to only one plasmid (\cref{fig:end_full_P}d(ii)); Fig S3). A nested infection network should therefore be unlikely to be maintained without influence from external factors (see Discussion).
+
+\begin{figure*}[!h]
+        \includegraphics[width=\linewidth]{PLOS_Biology/Fig_3.pdf}
+	\caption{\textbf{The effect of structure in the infection network $\vb{I}$ under a full plasmid compatibility network $\vb{P}$.} Rows i, ii, and iii represent different $\vb{I}$ structures. \textbf{(a)} Illustration of the structures of $\vb{I}$. \textbf{(b)} Final relative abundance of host populations. Each dot represents a replicate. Dots on the vertices had no coexistence (i.e. only one population survived), while dots on the edges had coexistence of two populations. For example, the green dot marked with a red circle in b(iii) represents a community with relative abundances of 0.9 for H1, 0.1 for H2, and 0.0 for H3. \textbf{(c)} Mean and SE of final plasmid prevalence across all replicates. \textbf{(d)} Final host population composition, averaged across replicates in which that host population survived (only populations surviving in $>5$ replicates were considered). Profiles represent the host subpopulations (e.g., the profile 1000 represents a subpopulation hosting P1).}
+\label{fig:end_full_P}
+\end{figure*}
+%\FloatBarrier
+
+In contrast, a modular $\vb{I}$ was the only structure which enabled host coexistence. The peripheral hosts H1 and H3 were both present at the end of the simulation, while the bridge host H2 always went extinct (coexistence probability $\approx0.4$ vs. $0$; \cref{fig:end_full_P}b(iii); Fig. S4-S6). The rapid extinction of H2 was explained by it being quickly co-infected by P2 and P3, thus bearing a higher net fitness cost than populations H1 and H3 (otherwise it could survive, see column H2 in Fig S7-S9). The bridge plasmids P2 and P3 had higher final prevalence than the peripheral plasmids P1 and P4 (\cref{fig:end_full_P}c(iii)). P2 and P3 maintained higher prevalence throughout the simulation because earlier in the simulation when H2 was still present, it acted as a source and increased the rate at which H1 and H3 were infected by these bridge plasmids (Fig S10). The longer-term success of P2 and P3 after their source H2 became extinct is an example of the long-term impact on communities caused by a transient, though unsuccessful population~\cite{Amor2020-dh}.
+
+Overall, our results so far show that modular structures promote the maintenance of diversity. Specifically, we observed prolonged host coexistence with modular $\vb{P}$, and stable host coexistence with modular $\vb{I}$. Communities with such structures are therefore more likely to produce evolutionary innovation. However, our model also predicts that the loss of the bridge host H2 might impede plasmid evolution by restricting opportunities for recombination between the bridge plasmids.
+
+\subsection*{Network structures can counteract the effects of one another}
+Up to this point, we explored structured $\vb{I}$ or $\vb{P}$ separately, while maintaining the other as a fully-connected control. In natural communities, structures likely exist in both of these networks simultaneously, so we next explored the interplay between the two. With a particular interest in the biological relevance of a hub structure, we demonstrate the results from a modular $\vb{I}$ and a hub $\vb{P}$ (\cref{fig:end_mod_I_hub_P}a; see Fig S1, S4, and S10 for results from other combinations). In contrast with full $\vb{I}$, where the hub plasmid P1 reached fixation (\cref{fig:end_full_I}c(iii)), under modular $\vb{I}$ the hub plasmid P1 had a very low average final prevalence while P3 reached the highest average prevalence (\cref{fig:end_mod_I_hub_P}c).
+
+\begin{figure*}[!h]
+        \includegraphics[width=\linewidth]{PLOS_Biology/Fig_4.pdf}
+	\caption{\textbf{The joint effect of structured networks: modular $\vb{I}$ and hub $\vb{P}$.} \textbf{(a)} The modular network structure of infection $\vb{I}$ and the hub network structure of plasmid compatibility $\vb{P}$. \textbf{(b)} Final relative abundance of host populations. Each dot represents a replicate. Dots on the vertices had no coexistence (i.e., only one population survives), while dots on the edges had the coexistence of two populations. For example, the green dot marked with a red circle represents a community with relative abundances of 0.5 for H1, 0.5 for H2, and 0.0 for H3. \textbf{(c)} Mean and SE of final plasmid prevalence across all replicates. \textbf{(d)} Final host population composition, averaged across replicates in which that host population survived (only populations surviving in $>5$ replicates were considered). Profiles represent the host subpopulations (e.g., the profile 1000 represents a subpopulation hosting P1).}
+\label{fig:end_mod_I_hub_P}
+\end{figure*}
+%\FloatBarrier
+
+These patterns resulted from the interaction between the structures of $\vb{I}$ and $\vb{P}$: although the hub plasmid P1 was compatible with the other three plasmids, the peripheral host H3 was its only possible host (\cref{fig:end_mod_I_hub_P}a). H3 could therefore be co-infected by P1 and P2. Under a full $\vb{P}$, the other peripheral host H1 could also be co-infected, but under a hub $\vb{P}$ this was no longer possible. This structure led to a higher net fitness of H1 compared to H3, driven by the co-infected subpopulation of H3. Consequently, H3 was less abundant than H1 on average across simulations, thereby limiting the abundance of P1 (\cref{fig:end_mod_I_hub_P}b, d; Fig S9). In addition, while under full $\vb{P}$ H2 always went extinct (\cref{fig:end_full_P}b(iii)), under structured $\vb{P}$ it coexisted with host H3 in some simulations (\cref{fig:end_mod_I_hub_P}b). This is because under structured $\vb{P}$ host H2 was not susceptible to the burden of co-infection (Fig. S9). 
+
+Overall, these results suggest that the infection network can counteract the effects of the plasmid compatibility network, especially when both are structured. Moreover, we expect that a hub plasmid compatibility structure---given as a boundary and initial condition that can be pruned by community dynamics---is unlikely to be maintained when paired with a modular infection structure, as a hub plasmid with a limited host range can rapidly reach low prevalence and therefore be lost stochastically from the community.
+
+\subsection*{Infection network structure drives dynamics in an experimental system}
+To further investigate our theoretical predictions regarding the impact of a modular $\vb{I}$ structure on the community, we used an empirical system we developed \cite{Schaal2025-yu}. The system comprised three bacterial host populations and two plasmids distinguishable by their colony phenotypes. The size of our empirical system was limited by the fluorescent labels available to track the plasmids. The community consisted of \textit{Pseudomonas fluorescens} SBW25 (bacterial host H1), \textit{Pseudomonas putida} KT2440 (H2), and \textit{Escherichia coli} MG1655 (H3). The plasmids were the \textit{Pseudomonas}-specific, mercury-resistant plasmid pQBR57 (P1), and the antibiotic-resistant plasmid pKJK5 (P2) which, under the experimental conditions, was not able to conjugate into \textit{P. fluorescens} SBW25. The system therefore can be described with a modular $\vb{I}$ and a full $\vb{P}$ (\cref{fig:comparison}a).
+
+\begin{figure*}[!h]
+        \includegraphics[width=\linewidth]{PLOS_Biology/Fig_5.pdf}
+	\caption{\textbf{Empirical network structures and simulated population dynamics.} \textbf{(a)} Empirical infection network $\vb{I}$ (top) and plasmid compatibility network $\vb{P}$ (bottom) from the empirical system. \textbf{(b)} Host population dynamics in the empirical system. \textbf{(c)} Infected subpopulation (plasmid) dynamics in the empirical system. \textbf{(d)} Simulated host population dynamics using the empirical networks. \textbf{(e)} Simulated infected subpopulation dynamics using the empirical networks. The empirical and modeling systems show similar patterns for host (panel b vs panel d) and plasmid (panel c vs panel e) dynamics. \textbf{(f)} Full infection network $\vb{I}$ used in simulation. \textbf{(g)} Simulated host population dynamics under the full infection network. \textbf{(h)} Simulated infected subpopulation dynamics under the full infection network. Using a full infection network (panel f) resulted in similar host population dynamics (panel g) but qualitatively different plasmid dynamics (panel h). All abundances are relative to community size. Error bars represent SE. The empirical observations had a sample size of 6, while the ABM simulations had a sample size of 300.}
+\label{fig:comparison}
+\end{figure*}
+%\FloatBarrier
+
+As variation in quantitative trait values better aligns with the empirical system, we re-parameterized our model accordingly, using experimental measurements where possible (Table S1-S4). Specifically, we used unequal population growth rates (H1 $\leq$ H2 $<$ H3), infection rates (H1 $=$ H2 $<$ H3), and plasmid costs (P1 $<$ P2), and a heterogeneous interspecific competition network (H1 $<$ H2 $<$ H3). For computational tractability, we used lower values of community-wide carrying capacity ($K_{ABM}=10^5$ vs $K_{empirical}=10^9$) and initial abundances ($B_{0ABM}=3.3\times10^3$ vs $B_{0empirical}=3.3\times10^5$ for each population). These differences did not affect the qualitative dynamics, and we compared empirical and model values in relative terms.
+
+Following our theoretical results, we expected that under a modular $\vb{I}$ and a full $\vb{P}$ that the bridge host H2 would be outcompeted by the peripheral hosts and go extinct, and that the resulting community would be primarily composed of infected subpopulations (\cref{fig:end_full_P}d(iii)). In contrast to this prediction, H2 maintained a higher relative abundance than the peripheral host H1 (\cref{fig:comparison}b). The most abundant plasmid in the system was P2, following the high abundance of its host (\cref{fig:comparison}c). The differences between the theory and the experiment may be explained by the heterogeneous growth rates, the interspecific competition network, and an increase in the growth rate of the bridge host. Indeed, when these factors were considered in the model (Table S1), the simulations qualitatively reflected the experimental results (\cref{fig:comparison}b-e; Fig S11).
+
+The key insight of our model is that structure in the $\vb{I}$ and $\vb{P}$ networks affects community dynamics. Having recapitulated the empirical results, we used the re-parameterized model to test how the outcome would change given an unstructured infection network (full $\vb{I}$; \cref{fig:comparison}f). While the host population dynamics remained unchanged (\cref{fig:comparison}g), the subpopulation dynamics were qualitatively different. Specifically, the less costly plasmid P1 reached a higher community-wide prevalence instead of P2 (\cref{fig:comparison}h). This provided further support that network structure is a key contributor to plasmid dynamics in natural systems.
+
+\section*{Discussion}
+\noindent Network structures underlying microbial interactions fundamentally shape community dynamics, yet the interplay of distinct networks remains poorly understood. Our work highlights how the combined effects of host-plasmid infection and plasmid-plasmid compatibility networks determine microbial coexistence and plasmid prevalence, potentially shaping long-term evolutionary trajectories. We show that a structured infection network exerts a stronger influence on host and plasmid persistence than a structured compatibility network. However, compatibility patterns still play a crucial role in shaping plasmid diversity and co-infection dynamics, which in turn influence plasmid recombination and evolutionary innovation \cite{Rodriguez-Beltran2021-ue}. These modeling results were further supported by experiments: a model parameterized to match empirical dynamics successfully recapitulated experimental observations, but only when the infection network incorporated structure. This outcome clearly underscores that structured network interactions critically shape microbial community outcomes. Thus, explicitly incorporating biological realism into network-based models not only enhances their predictive accuracy but also reveals the fundamental importance of network structure in shaping microbial dynamics. 
+
+An important finding is that the infection network retains its modular structure more consistently when the plasmid compatibility network is also structured, underscoring a rarely considered mechanism: the interplay between structured networks itself enhances stability. This observation reinforces the necessity of considering interactions between multiple networks when investigating the ecology of infectious agents. Empirical studies support this idea, as structured infection networks often co-occur with restricted plasmid transfer pathways, limiting the spread of deleterious plasmids \cite{Risely2024-ls}. Moreover, our model-derived insight that plasmid compatibility shapes host persistence finds support in studies where host-plasmid dynamics are influenced by both direct host interactions and compatibility constraints \cite{Rocha2022-ub}. Future empirical work should aim to test whether structured plasmid compatibility networks similarly increase the stability of community composition and function in natural microbial communities.
+
+Our results indicate that a structured plasmid compatibility network alters host population composition. Therefore, the structure of the compatibility network can determine plasmid recombination potential \cite{Dionisio2019-mh}. Such structure-dynamics feedback can have implications for multidrug resistance, which emerges primarily through horizontal gene transfer between compatible plasmids in the same host \cite{Lam2019-de, Wang2024-hv}. Empirical evidence suggests that MGEs can actively rewire compatibility networks by interfering with competing elements \cite{Rocha2022-ub}, reinforcing our finding that compatibility constraints limit the range of hosts a plasmid can inhabit, thereby shaping host-plasmid interactions. Our results also indicate that plasmids are more likely to persist than hosts under changing network structures if they can survive in a single surviving host population. Thus, plasmids have substantial potential for evolution and host range expansion even under reduced host diversity, mirroring real-world observations of broad-host-range plasmids \cite{Hall2021-lo}.
+
+Unlike compatibility networks, structured infection networks led to strong heterogeneity in plasmid prevalence across plasmids and in co-infection across hosts. This pattern was further reinforced by our experimental validation. In contrast to plasmid compatibility networks, infection networks in our model were inherently unstable, frequently leading to host extinction. This contrasts with natural systems, where modular and nested structures are commonly observed \cite{Flores2011-fx, Beckett2013-tz, Kauffman2022-ok}, suggesting stabilizing factors. Population-level trait heterogeneity and positive epistasis in plasmid fitness costs \cite{San_Millan2014-ak, Igler2022-lv} may mitigate destabilization, allowing structured networks to persist in nature. The asymmetry between host and plasmid dynamics arises because altered plasmid compatibility can expose hosts to a high infection burden, leading to their extinction, while changes in infection patterns are less likely to cause plasmid extinction as long as a viable host remains.
+
+Our study focused on a small and fixed system to isolate effects related to network structure.
+Yet, in larger systems, functional redundancy and increased complexity of interactions could dampen the effects of network interplay \cite{Biggs2020-kg, Wood2021-nn, Puente-Sanchez2024-cb}. We further assumed uniform host traits as well instead of introducing host diversity. While previous studies suggest that host heterogeneity does not critically alter horizontal gene transfer patterns \cite{Zhu2024-rr}, incorporating host heterogeneity could alter our predictions. Nevertheless, we note that parameterizing our model according to empirical data did not qualitatively change the key result that structure alters plasmid dynamics. 
+Finally, we did not consider perturbations such as antibiotic stress, which---as shown in an empirical experiment \cite{Schaal2025-yu}---can shift host-MGE interactions from antagonistic to mutualistic. While this allowed us to generate a theory that is generally relevant for infectious agents, future research could integrate eco-evolutionary feedback and perturbations to capture these dynamical aspects of host-plasmid communities. 
+
+An open question is how network structure evolves and persists. While the infection and compatibility networks we modeled resemble those observed in microbial ecosystems \cite{Weitz2013-ye, Flores2011-fx, Pilosof2020-lz, Light2005-es, Liu2022-mq, Rawstern2023-ua, Yang2020-cf}, we effectively treated them as boundary conditions within which links can change but nodes themselves cannot evolve. In reality, network structures emerge via eco-evolutionary processes \cite{Beckett2013-tz, Pilosof2020-lz, Pilosof2023-kx} and host adaptation, immunity, and plasmid evolution likely shape infection network structure \cite{Weitz2013-ye, Pilosof2023-kx}. Plasmid compatibility networks, although much less studied, likely evolve through recombination \cite{Rodriguez-Beltran2021-ue} and mutations \cite{Santos-Lopez2017-sf}. Adaptive defense mechanisms that mediate plasmid competition \cite{Pinilla-Redondo2020-if, Rocha2022-ub} may also influence compatibility constraints. Moreover, there may be interacting evolutionary trajectories of the interacting networks, leading to multi-level selection. Future models could incorporate such evolutionary feedback, shifting from fixed boundary conditions to dynamic, emergent structures.
+
+\section*{Conclusion}
+In conclusion, our study provides a novel perspective on microbial ecology by explicitly demonstrating that the interplay between host-plasmid infection and plasmid-plasmid compatibility networks profoundly shapes community dynamics and evolutionary potential. Crucially, we find that the interconnectedness of these ecological networks itself stabilizes host-plasmid communities, underscoring the need to move beyond studying interaction types in isolation. Beyond microbial ecology, these theoretical and modeling developments offer insights into community dynamics of infectious agents and their hosts.
+
+\section*{Materials and methods}
+\subsection*{Host-plasmid agent-based model}
+\subsubsection*{Entities} The entities (agents) of the ABM were host subpopulations. Each subpopulation of host $i$ contained a plasmid profile $p$. Each plasmid profile is a vector of elements 0 and 1, representing the presence (1) or absence (0) of each plasmid in the subpopulation. Therefore, a community with $n_b$ hosts and $n_p$ plasmids had at most $n_b \times 2^{n_p}$ subpopulations. We defined $H_{i,p}$ as the abundance of a subpopulation, and $H_i$ as the abundance of host $i$ ($H_i=\Sigma_{p=\mathbf{0}}^{2^{n_p}-1}H_{i,p}$). For simplicity, we assumed each plasmid had a single copy in each host individual. We present an example for this notation in \cref{tab: tab1}. Based on the plasmid profiles, we generated a list of donors (the plasmid-infected subpopulations that can transmit plasmids to others), and for each donor a list of recipients (the subpopulations that can receive plasmids from the donor) during ABM initialization. The lists of donors and recipients were used to sample subpopulations that undergo HGT and were updated during the simulations when new subpopulations emerged.
+
+\begin{table}[!ht]
+\centering\captionsetup{font=footnotesize}
+\begin{center}
+ \caption{\textbf{Example of agent notation.} In this example there are hosts (H1 and H2) and two plasmids (P1 and P2).}\label{tab: tab1}
+ \begin{tabular}{@{}lllll@{}}
+ \toprule
+Host $(i)$ & Plasmid profile $(p)$ & Abundance $(H_{i,p})$\\
+ \midrule
+    1  & [0,0] & 10 \\
+    1  & [1,0] & 5 \\
+    1  & [0,1] & 0 \\
+    1  & [1,1] & 0 \\
+    2  & [0,0] & 10 \\
+    2  & [1,0] & 5 \\
+    2  & [0,1] & 0 \\
+    2  & [1,1] & 0 \\
+ \bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsubsection*{Spatial and temporal scales} We did not consider a spatial structure. We used hour as the time unit, as most per-capita rates are quantified with this unit in microbial studies. We used a 20000 hours time span for the simulations of the theoretical part to ensure stable coexistence, and a 240 hours (10 days) time span for simulations supporting the lab experiment, which is ample for most host populations/communities to reach carrying capacity in a lab environment \cite{Hall2016-zb}.
+
+\subsubsection*{Events} Five major events contributed to the dynamics of the entities: death, growth, segregation, competition, and infection (\cref{fig:event_design_dyn_MF}b). In each death and competition event, the chosen agent decreased its abundance by one. In each growth event, the chosen agent increased its abundance by one. In each segregation event (i.e., growth with segregation error), we assumed plasmid segregation fails, so the plasmid-free agent $H_{i, \mathbf{0}}$ increased its abundance by one. With each infection event, the chosen donor agent $H_{i,p}$ infected a recipient agent $H_{k,q}$, turning it into a transconjugant agent $H_{k,r}$. As a result, the donor's abundance remained the same, the recipient's abundance decreased by one, and the transconjugant's abundance increased by one.
+
+
+\subsubsection*{Interaction networks} We used an infection network and a plasmid compatibility network. The infection network $\vb{I}$ was a binary incidence matrix that determined if the plasmid $\beta$ (column) can infect the host $i$ (row). The plasmid compatibility network $P$ was a symmetric binary matrix that determined if two plasmids $\alpha$ and $\beta$ can coexist within the agent individuals, with the assumption that plasmids were self-incompatible ($P_{\alpha\beta}=0\;\forall\;\alpha = \beta$). We also assumed that the hosts had equal strength of interspecific competition, and that HGT occurred both between and within hosts.
+
+\subsubsection*{Host and plasmid traits} For the host, we used per capita growth rate $\eta_i$, per capita death rate $\mu_i$, and probability of segregation error $e_i$. For the plasmids, we used plasmid cost on host growth $c_{\alpha}$. We applied a community-wide carrying capacity $K$, limiting the sum of population abundances. A complete list of parameters and their values is provided in \cref{tab: tab2}.
+
+\begin{table}[!ht]
+\centering\captionsetup{font=footnotesize}
+\begin{center}
+ \caption{Parameter values used in the simulations of the theoretical part. Parameter values were based on/taken from \cite{Harrison2015-zl}.}\label{tab: tab2}
+ \begin{tabular}{@{}lllll@{}}
+ \toprule
+Host traits & H1 & H2 & H3 \\
+ \midrule
+    growth rate $\eta_i$ & 1 & 1 & 1 \\
+    death rate $\mu_i$ & 0.12 & 0.12 & 0.12 \\
+    infection rate $\gamma_i$ & $10^{-5}$ & $10^{-5}$ & $10^{-5}$ \\
+    segregation rate $\gamma_i$ & $10^{-8}$ & $10^{-8}$ & $10^{-8}$ \\
+    community-wide carrying capacity $K$ & 20000 & 20000 & 20000 \\
+    intraspecific competition coefficient $a_{ii}$ & 1 & 1 & 1 \\
+    interspecific competition coefficient $a_{ij}$ & 0.01 & 0.01 & 0.01 \\
+    \midrule
+Plasmid traits & P1 & P2 & P3 & P4 \\
+\midrule
+    plasmid cost $c_{\alpha}$ & 0.3 & 0.3 & 0.3 & 0.3 \\
+ \bottomrule
+\end{tabular}%
+\end{center}
+\end{table}
+
+\subsubsection*{Infection propensity} When the infection event is chosen, we considered the propensities with which transconjugants were generated given combinations of donors and recipients. Specifically, we used a three-dimensional infection propensity tensor $\vb*{\Gamma}$, with each dimension of size $n_b^{n_p}$ corresponding to all potential entities (subpopulations) $H_{i,p}$ along the transconjugant, donor, and recipient axes. We assumed that the more plasmids transmitted in an infection, the lower the propensity. Thus, the elements (propensities) of $\vb*{\Gamma}$ that met the infection conditions (\cref{tab: tab3}) were estimated following the power law:
+\begin{equation}
+     \Gamma_{k,r;i,p;k,q} = \frac{1}{2^{\nu-1}} ,\label{eq1}
+\end{equation}
+Here, $\Gamma_{k,r;i,p;k,q}$ represented the propensity of the recipient $H_{k,q}$, after receiving plasmid(s) from donor $H_{i,p}$, to become transconjugant $B_{k,r}$. The parameter $\nu$ represented the number of plasmid strains being transferred from the donor to the recipient. Other elements of $\vb*{\Gamma}$ were treated as 0. We provide an example propensity tensor for a system with one host and two plasmids in \cref{fig:tensor_example}.
+
+\begin{table}[ht]
+\centering\captionsetup{font=footnotesize}
+\begin{center}
+ \caption{Conditions for infection to occur.}\label{tab: tab3}
+ %\resizebox{\columnwidth}{!}{%
+ \begin{tabular}{@{}ll@{}}
+ \toprule
+Condition & Content \\
+ \midrule
+    1  & Donor is plasmid-infected ($p \neq \vb{0}$) \\
+    2  & Donor has plasmid(s) that the recipient does not \\
+    3  & Transferable plasmid(s) can infect the recipient ($\vb{I_{\beta \textit{i}}} = 1$)\\
+    4 & Plasmids in the transconjugant can coexist ($\vb{P_{\alpha\beta}} = 1$) \\ 
+ \bottomrule
+\end{tabular}%
+%}
+\end{center}
+\end{table}
+
+\begin{figure*}[!h]
+        \includegraphics[width=0.5\linewidth]{PLOS_Biology/Fig_6.pdf}
+	\caption{\textbf{An example for a propensity tensor.} This example focuses on the dimension of the recipient $H_{k=1,q=[0,0]}$. Element $\Gamma_{1,[1,1]; 1,[1,1]; 1,[0,0]} = 1/2$ because there are two plasmids being transferred from the donor $H_{i=1,p=[1,1]}$ to the recipient $H_{k=1,q=[0,0]}$, creating the transconjugant $H_{k=1,r=[1,1]}$. Each column of the propensity tensor (i.e., with a given combination of donor and recipient) with at least one element $>0$ was then normalized to 1, ensuring the propensities of each column summed up to 1.}
+\label{fig:tensor_example}
+\end{figure*}
+%\FloatBarrier
+
+\subsubsection*{Rates} The dynamics of the subpopulations (\nameref{S1_Appendix} and Fig S12) were based on a Lotka-Volterra model with infection-recovery elements. In this model, each subpopulation had its per capita rate of events based on strain and plasmid profile, and its total rates of events based on its per capita rates $\times$ abundance, which summed up to the total rate of events $R$. Below we define the equations of subpopulation per capita rates (variables used in the equations are described in Table S5).
+We defined the subpopulation per capita death rate as $\mu_{i,p} = \mu_{i}$ (host-specific) and the per capita growth rate as
+\begin{equation}
+    \eta_{i,p} = \eta_i\prod_{\alpha \mid p_{\alpha} \neq 0} (1-c_{\alpha}), \label{eq2}
+\end{equation}
+where the realized growth rate was the host-specific per capita growth rate, $\eta_i$, times the product of the complements of the costs across plasmids hosted by the subpopulation. Therefore, we assumed that the plasmid costs are not additive but multiplicative for the host. We defined the subpopulation per capita segregation rate as
+\begin{equation}
+    \omega_{i,p} = e_i\eta_{i,p}.  \label{eq3}
+\end{equation}
+
+We defined the competition matrix $\vb{A}$, in which each cell $a_{ij}$ is the effect of host $j$ on the per-capita growth rate of host $i$. As with other parameters, we used a uniform $a_{ij}=0.01$ to ensure that the community effects we get are not due to some random competitive advantage of one host over another, but rather due to the structure of the networks. We applied a community-wide carrying capacity $K$, and defined the subpopulation per capita competition rate as
+\begin{equation}
+    \xi_{i,p} = \eta_{i,p} \left( \sum\limits_j b_{ij}\frac{H_j}{K}\right).\label{eq4}
+\end{equation}
+Here, $b_{ij} = a_{ij}+1$ for $i \neq j$, and $b_{ij}$ equals to 1 when $i=j$. 
+
+We defined the subpopulation per capita infection rate $\phi_{i,p}$ as
+\begin{equation}
+\phi_{i,p} = \gamma_{i,p}\sum{H_{i,p} \in \mathbf{G}},  \label{eq5}
+\end{equation}
+where $\gamma_{i,p}$ is the per capita encounter rate between a donor (i.e., plasmid-hosting) and its recipients, and was either host-specific for subpopulations hosting plasmid(s), or zero for the plasmid-free subpopulations. $\mathbf{G}$ was the set of recipient subpopulations that could receive plasmid(s) from the donor subpopulation. While the mechanisms by which the donors and recipients of plasmids meet could be complex \cite{Neil2021-rp}, we assumed these mechanisms to be donor-dependent and plasmid-profile-independent.
+
+\subsubsection*{Simulations} We applied the Gillespie algorithm, which includes the following steps:
+\begin{enumerate}
+    \item Initialize the system with variable inputs (including parameter values and initial subpopulation abundances) (\nameref{S1_Appendix} and Table S6), and set time t to zero.
+    
+    \item Calculate the total rate of the system $R = R_D+R_G+R_S+R_C+R_I$, which is composed of the total rates of death:
+    \begin{equation}
+        R_D=\sum_{i,p}\mu_{i,p}H_{i,p}, \label{eq6}
+    \end{equation} 
+    growth: 
+    \begin{equation}
+        R_G=\sum_{i,p}\eta_{i,p}H_{i,p}, \label{eq7}
+    \end{equation} 
+    segregation:
+    \begin{equation}
+        R_S=\sum_{i,p}\omega_{i,p}H_{i,p}, \label{eq8}
+    \end{equation}
+    competition:
+    \begin{equation}
+        R_C=\sum_{i,p}\xi_{i,p}H_{i,p}, \label{eq9}
+    \end{equation}
+    and infection:
+    \begin{equation}
+        R_I=\sum_{i,p}\phi_{i,p}H_{i,p} \label{eq10}
+    \end{equation}.
+    
+    \item Sample the length of a time step $\Delta t = \frac{X}{R}$, where $X$ was drawn from an exponential distribution with a mean of $1$.
+    
+    \item Randomly sample an event, with weights proportional to the event's weight out of the  total rate $(R_D/R, R_G/R, R_S/R, R_C/R, R_I/R)$
+    
+    \item Sample the agent(s). If the chosen event is not infection, randomly sample an agent $H_{i,p}$, with weights according to the subpopulations' event rates. If the chosen event is infection, first sample a donor agent $H_{i,p}$ from the plasmid-infected subpopulations, with weights according to their infection rates. Then, sample a recipient agent $H_{k,q}$ from the recipient subpopulations that are vulnerable to the donor, with weights according to their abundances. Finally, sample a transconjugant agent $H_{k,r}$, with weights according to the propensity tensor $\vb*{\Gamma}$.
+    
+    \item Execute the chosen event for the chosen agent(s), and update the simulation time ($t' = t + \Delta t $). 
+    
+    \item Move to step 3 until the simulation time meets the final time. Meanwhile, record the subpopulation abundances when t is equal to or passes desired length of time set for recording the system's set (5 hours in our case). 
+    
+    \item When the simulation reaches the defined time limit $t = 20000$ or $t$ at which the system collapses (all host populations have zero abundance), write the data frame into the output file in SQLite format (\nameref{S1_Appendix}). The output file was used for further analyses. 
+\end{enumerate}
+
+\subsubsection*{Model limitations} Although our model can simulate multihost–multiplasmid systems, it faces computational constraints as system complexity increases. As the number of host ($n_b$) and plasmid populations ($n_p$) increases, so does the time required to generate the infection propensity tensor (of size $n_b \times 2^{n_p}$ in each of the three dimensions), and to initialize the system (e.g., generate lists of donors and corresponding recipients) unless the interaction networks are extremely sparse. Because the Gillespie algorithm is used, increasing system complexity and community-wide carrying capacity inevitably raises the total event rate $R$. This, in turn, reduces the sampled time step in each iteration, making it more time-consuming for the simulation to reach the final time (\nameref{S1_Appendix} and Fig S13).
+
+
+\subsection*{Experimental design of the theoretical part}
+\noindent We used a $3 \times 3$ factorial design of the combinations of $\vb{I}$ and $\vb{P}$, which resulted in 9 experiments (\cref{tab: tab4}). Due to the stochastic nature of the ABM, we ran 300 replicates for each experiment, each with a different seed for random sampling. To test how plasmids spread, we initiated populations with a low abundance of monoplasmidic subpopulations (10) compared to plasmid-free subpopulations (2000). We included all potential monoplasmidic subpopulations, so that each plasmid already existed in focal hosts before it was acquired from other hosts.
+
+\begin{table}[ht]
+\centering\captionsetup{font=footnotesize}
+\begin{center}
+ \caption{Experimental design of the theoretical part.}\label{tab: tab4}
+ \begin{tabular}{@{}lllll@{}}
+ \toprule
+Expt.(code) & I  & P \\
+ \midrule
+    1 (FF) & full & full \\
+    2 (FM) & full & modular \\
+    3 (FH) & full & hub \\
+    4 (NF) & nested & full \\
+    5 (NM) & nested & modular \\
+    6 (NH) & nested & hub \\
+    7 (MF) & modular & full \\
+    8 (MM) & modular & modular \\
+    9 (MH) & modular & hub \\
+ \bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection*{Lab experiment}
+\noindent We used data from the study by Schaal et al. \cite{Schaal2025-yu}, which contains a detailed description of the experiment. Briefly, a community of three host bacteria (\textit{Pseudomonas fluorescens} SBW25, \textit{Pseudomonas putida} KT2440, and \textit{Escherichia coli} MG1655) and two plasmids (the mercury-resistant pQBR57, and the antibiotic-resistant plasmid pKJK5) was cultured over five 48-hour transfers (10 days) in shaken liquid medium. One host could be (co)-infected by both plasmids, while the other two hosts could only be infected by one plasmid each. In this work, we used the data only from the communities that did not experience environmental stress. We used bacterial derivatives and fluorescent proteins to track different host populations and plasmids, and applied a link-balanced initial community composition, where all populations started with equal abundance, comprising of $50\%$ plasmid-free subpopulation and $50\%$ plasmid-carrying subpopulations. We quantified population and subpopulation abundance on days 2, 6, and 10, and summarized population and subpopulation dynamics.
+
+\subsection*{Code and data availability}
+\noindent The code and data for ABM simulation, input generation, output analyses, and empirical data analysis is available in the dedicated Github repository associated with this paper at: \url{https://github.com/HFSP-EcoNets/ABM_code}. Empirical data is also available in the collaborative study by Schaal et al. \cite{Schaal2025-yu}.
+
+\section*{Supporting information}
+
+% Include only the SI item label in the paragraph heading. Use the \nameref{label} command to cite SI items in the text.
+\paragraph*{S1 Fig.}
+\label{S1_Fig}
+{\bf Relative abundance of populations at the end of the simulations.} Relative abundance of populations at the end of the simulations (t = 20000 hours) at the following network structures: full I x full P (FF), full I x modular P (FM), full I x hub P (FH), nested I x full P (NF), nested I x modular P (NM), nested I x hub P (NH), modular I x full P (MF), modular I x modular P (MM), and modular I x hub P (MH). Dots on the vertices represent no coexistence (i.e. only one population survived), while dots on the edges represent the coexistence of two populations.
+
+\paragraph*{S2 Fig.}
+\label{S2_Fig}
+{\bf Dynamics of subpopulation abundance (mean ± 1 SE) at full I x full P (FF).} Note that the number of replicates of a subpopulation at a given time point may vary across time, for it depends on how many replicates still have that subpopulation at that time point. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S3 Fig.}
+\label{S3_Fig}
+{\bf Dynamics of subpopulation abundance (mean ± 1 SE) at nested I x full P (NF).} Note that the number of replicates of a subpopulation at a given time point may vary across time, for it depends on how many replicates still have that subpopulation at that time point. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S4 Fig.}
+\label{S4_Fig}
+{\bf Dynamics of microbe coexistence of three populations (solid line) and two populations (dashed line) at the end of the simulations.} Dynamics of microbe coexistence of three populations (solid line) and two populations (dashed line) at the end of the simulations (t = 20000 hours) at the following network structures: full I x full P (FF), full I x modular P (FM), full I x hub P (FH), nested I x full P (NF), nested I x modular P (NM), nested I x hub P (NH), modular I x full P (MF), modular I x modular P (MM), and modular I x hub P (MH). The dynamics of microbe coexistence probability is calculated as the proportion of replicates with complete(3-population)/partial(2-population) coexistence out of total number of replicates across time. Time was only plotted to t = 10000 where all probabilities had dropped to zero. The K at x-axis represents 1000 (hours).
+
+\paragraph*{S5 Fig.}
+\label{S5_Fig}
+{\bf Dynamics of population abundance (a) and subpopulation abundance (b) at modular I x full P (MF) from replicate 21.} Replicate 21 demonstrated the stable coexistence scenario where the plasmid-free subpopulations of the peripheral hosts persisted. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S6 Fig.}
+\label{S6_Fig}
+{\bf Dynamics of population abundance (a) and subpopulation abundance (b) at modular I x full P (MF) from replicate 23.} Replicate 23 demonstrated the unstable coexistence scenario where the plasmid-free subpopulations of the peripheral hosts went extinct. When the plasmid-free subpopulations went extinct, monoplasmidic subpopulations lost input from infection and quickly got co-infected, destabilizing the oscillatory dynamics of the coexisting populations. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S7 Fig.}
+\label{S7_Fig}
+{\bf Dynamics of subpopulation abundance (mean ± 1 SE) at modular I x full P (MF).} Note that the number of replicates of a subpopulation at a given time point may vary across time, for it depends on how many replicates still have that subpopulation at that time point. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S8 Fig.}
+\label{S8_Fig}
+{\bf Dynamics of subpopulation abundance (mean ± 1 SE) at modular I x modular P (MM).} Note that the number of replicates of a subpopulation at a given time point may vary across time, for it depends on how many replicates still have that subpopulation at that time point. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S9 Fig.}
+\label{S9_Fig}
+{\bf Dynamics of subpopulation abundance (mean ± 1 SE) at modular I x hub P (MH).} Note that the number of replicates of a subpopulation at a given time point may vary across time, for it depends on how many replicates still have that subpopulation at that time point. The K at y-axis represents carrying capacity, while the K at x-axis represents 1000 (hours).
+
+\paragraph*{S10 Fig.}
+\label{S10_Fig}
+{\bf Dynamics of plasmid prevalence (mean ± 1 SE).} Dynamics of plasmid prevalence (mean ± 1 SE) at at the following network structures: full I x full P (FF), full I x modular P (FM), full I x hub P (FH), nested I x full P (NF), nested I x modular P (NM), nested I x hub P (NH), modular I x full P (MF), modular I x modular P (MM), and modular I x hub P (MH). Time was only plotted to t = 10000 where equilibrium of plasmid prevalence had been reached. The K at x-axis represents 1000 (hours).
+
+\paragraph*{S11 Fig.}
+\label{S11_Fig}
+{\bf (a) The host population dynamics and (b) host subpopulation dynamics from the simulations assuming no increase on the growth rate of the bridge host H2 under a modular \textbf{I} based on an empirical system (Figure 5a, top row).} 
+
+\paragraph*{S12 Fig.}
+\label{S12_Fig}
+{\bf Illustration of the dynamics of plasmid-carrying subpopulation (left box with a circle in it) and plasmid-free subpopulation (right box).} Colored arrows indicate abundance inflows/outflows from the five events: growth (green), death (red), competition (purple), infection (orange), and segregation (blue). Alongside each arrow lists the per capita rate of the event, with subscripts denoting host $i$ and plasmid profile $p$ of the subpopulation.
+
+\paragraph*{S13 Fig.}
+\label{S13_Fig}
+{\bf Elapse time of tensor generation, initialization and simulation across system complexity $n$, i.e. the number of host and plasmid populations in the system.}
+
+\paragraph*{S1 Appendix.}
+\label{S1_Appendix}
+{\bf Supporting information for the agent-based model.} Subpopulation dynamics, input and output, and complexity-dependent computational efficiency.
+
+\paragraph*{S1 Table.}
+\label{S1_Table}
+{\bf Host-specific parameters.} The net population growth rates were parameterized using the empirical data fit to the standard form of logistic equation in the R package \textit{growthcurver} \cite{Sprouffske2016-hl}, while the population growth rates and death rates were arbitrarily assigned to match the net population growth rate. The infection rates and competition coefficients were assigned in a relative magnitude in order to better match the empirical subpopulation and population dynamics. The segregation rates and perturbation impact were arbitrarily assigned and fixed to an extremely low value as these can be omitted. The community-wise carrying capacity was arbitrarily assigned for computational efficiency. We later assumed an increase in the growth rate of the bridge host (H2).
+
+\paragraph*{S2 Table.}
+\label{S2_Table}
+{\bf Plasmid-specific parameters.} The plasmid costs were assigned in a relative magnitude based on empirical monocultures of the infected bridge host population in order to better match the empirical subpopulation and population dynamics. The plasmid resistance was arbitrarily assigned and fixed as these are irrelevant for systems without perturbations.
+
+\paragraph*{S3 Table.}
+\label{S3_Table}
+{\bf Initial abundance of the plasmid-present system for a modular infection network \textbf{I}.}
+
+\paragraph*{S4 Table.}
+\label{S4_Table}
+{\bf Initial abundance of the plasmid-present system for a full infection network \textbf{I}.}
+
+\paragraph*{S5 Table.}
+\label{S5_Table}
+{\bf Constants and parameters for the ABM.}
+
+\paragraph*{S6 Table.}
+\label{S6_Table}
+{\bf Variables for the ABM input.}
+
+\paragraph*{S7 Table.}
+\label{S7_Table}
+{\bf Constants and parameters for the model performance test.}
+
+\section*{Acknowledgments}
+We thank G. Galai for technical support in programming. Prof. David Alonso and Prof. Mercedes Pascual provided insightful comments. The study was funded by the Human Frontier Science Program (grant RGY0064/2022) to S.P., J.P.H., M.D.D. Kreitman School of Advanced Graduate Studies, Ben-Gurion University of Negev, supported the fellowship of Y.J.
+
+\nolinenumbers
+
+%\bibliographystyle{plos2015}
+\bibliography{paperpile}
+
+\end{document}
+
