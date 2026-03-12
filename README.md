@@ -2,7 +2,7 @@
 
 A browser-based word counter for LaTeX manuscripts, built by the [Ecological Complexity Lab](https://ecomplab.com).
 
-**Live app → [ecomplab.github.io/paper_word_count](https://ecomplab.github.io/paper_word_count/)**
+**Live app → [Ecological-Complexity-Lab.github.io/paper_word_count](https://Ecological-Complexity-Lab.github.io/paper_word_count/)**
 
 All processing happens locally in your browser — your files are never uploaded anywhere.
 
